@@ -1,0 +1,282 @@
+[
+  {
+    "code": "he",
+    "native": "עברית",
+    "english": "Hebrew",
+    "rtl": true,
+    "translated": true
+  },
+  {
+    "code": "en",
+    "native": "English",
+    "english": "English",
+    "rtl": false,
+    "translated": true
+  },
+  {
+    "code": "ar",
+    "native": "العربية",
+    "english": "Arabic",
+    "rtl": true,
+    "translated": true
+  },
+  {
+    "code": "ru",
+    "native": "Русский",
+    "english": "Russian",
+    "rtl": false,
+    "translated": true
+  },
+  {
+    "code": "fr",
+    "native": "Français",
+    "english": "French",
+    "rtl": false,
+    "translated": true
+  },
+  {
+    "code": "es",
+    "native": "Español",
+    "english": "Spanish",
+    "rtl": false,
+    "translated": true
+  },
+  {
+    "code": "de",
+    "native": "Deutsch",
+    "english": "German",
+    "rtl": false,
+    "translated": true
+  },
+  {
+    "code": "pt",
+    "native": "Português",
+    "english": "Portuguese",
+    "rtl": false,
+    "translated": true
+  },
+  {
+    "code": "zh",
+    "native": "中文",
+    "english": "Chinese",
+    "rtl": false,
+    "translated": true
+  },
+  {
+    "code": "hi",
+    "native": "हिन्दी",
+    "english": "Hindi",
+    "rtl": false,
+    "translated": true
+  },
+  {
+    "code": "it",
+    "native": "Italiano",
+    "english": "Italian",
+    "rtl": false,
+    "translated": true
+  },
+  {
+    "code": "tr",
+    "native": "Türkçe",
+    "english": "Turkish",
+    "rtl": false,
+    "translated": true
+  },
+  {
+    "code": "ja",
+    "native": "日本語",
+    "english": "Japanese",
+    "rtl": false,
+    "translated": true
+  },
+  {
+    "code": "ko",
+    "native": "한국어",
+    "english": "Korean",
+    "rtl": false,
+    "translated": true
+  },
+  {
+    "code": "nl",
+    "native": "Nederlands",
+    "english": "Dutch",
+    "rtl": false,
+    "translated": true
+  },
+  {
+    "code": "sv",
+    "native": "Svenska",
+    "english": "Swedish",
+    "rtl": false,
+    "translated": true
+  },
+  {
+    "code": "pl",
+    "native": "Polski",
+    "english": "Polish",
+    "rtl": false,
+    "translated": true
+  },
+  {
+    "code": "uk",
+    "native": "Українська",
+    "english": "Ukrainian",
+    "rtl": false,
+    "translated": true
+  },
+  {
+    "code": "el",
+    "native": "Ελληνικά",
+    "english": "Greek",
+    "rtl": false,
+    "translated": true
+  },
+  {
+    "code": "ro",
+    "native": "Română",
+    "english": "Romanian",
+    "rtl": false,
+    "translated": true
+  },
+  {
+    "code": "hu",
+    "native": "Magyar",
+    "english": "Hungarian",
+    "rtl": false,
+    "translated": true
+  },
+  {
+    "code": "cs",
+    "native": "Čeština",
+    "english": "Czech",
+    "rtl": false,
+    "translated": true
+  },
+  {
+    "code": "fi",
+    "native": "Suomi",
+    "english": "Finnish",
+    "rtl": false,
+    "translated": true
+  },
+  {
+    "code": "da",
+    "native": "Dansk",
+    "english": "Danish",
+    "rtl": false,
+    "translated": true
+  },
+  {
+    "code": "no",
+    "native": "Norsk",
+    "english": "Norwegian",
+    "rtl": false,
+    "translated": true
+  },
+  {
+    "code": "id",
+    "native": "Bahasa Indonesia",
+    "english": "Indonesian",
+    "rtl": false,
+    "translated": true
+  },
+  {
+    "code": "ms",
+    "native": "Bahasa Melayu",
+    "english": "Malay",
+    "rtl": false,
+    "translated": true
+  },
+  {
+    "code": "th",
+    "native": "ไทย",
+    "english": "Thai",
+    "rtl": false,
+    "translated": true
+  },
+  {
+    "code": "vi",
+    "native": "Tiếng Việt",
+    "english": "Vietnamese",
+    "rtl": false,
+    "translated": true
+  },
+  {
+    "code": "fa",
+    "native": "فارسی",
+    "english": "Persian",
+    "rtl": true,
+    "translated": true
+  },
+  {
+    "code": "ur",
+    "native": "اردو",
+    "english": "Urdu",
+    "rtl": true,
+    "translated": true
+  },
+  {
+    "code": "bn",
+    "native": "বাংলা",
+    "english": "Bengali",
+    "rtl": false,
+    "translated": true
+  },
+  {
+    "code": "pa",
+    "native": "ਪੰਜਾਬੀ",
+    "english": "Punjabi",
+    "rtl": false,
+    "translated": true
+  },
+  {
+    "code": "ta",
+    "native": "தமிழ்",
+    "english": "Tamil",
+    "rtl": false,
+    "translated": true
+  },
+  {
+    "code": "te",
+    "native": "తెలుగు",
+    "english": "Telugu",
+    "rtl": false,
+    "translated": true
+  },
+  {
+    "code": "sw",
+    "native": "Kiswahili",
+    "english": "Swahili",
+    "rtl": false,
+    "translated": true
+  },
+  {
+    "code": "am",
+    "native": "አማርኛ",
+    "english": "Amharic",
+    "rtl": false,
+    "translated": true
+  },
+  {
+    "code": "bg",
+    "native": "Български",
+    "english": "Bulgarian",
+    "rtl": false,
+    "translated": true
+  },
+  {
+    "code": "sr",
+    "native": "Српски",
+    "english": "Serbian",
+    "rtl": false,
+    "translated": true
+  },
+  {
+    "code": "hr",
+    "native": "Hrvatski",
+    "english": "Croatian",
+    "rtl": false,
+    "translated": true
+  }
+]

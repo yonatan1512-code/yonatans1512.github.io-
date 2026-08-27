@@ -1,0 +1,651 @@
+
+  +---------------------------------------------+
+  |   SmartSaver AI  -  local server running    |
+  +---------------------------------------------+
+
+   Full site (one file)  http://localhost:8000/smartsaver-ai-complete.html
+   Landing page          http://localhost:8000/
+   Dashboard             http://localhost:8000/dashboard.html
+
+   Serving from          C:\Users\Yonatan\OneDrive\Desktop\YONATAN AI
+   Stop with             Ctrl+C
+
+  ✓  "GET /smartsaver-ai-complete.html HTTP/1.1" 200 -
+  ✓  "GET / HTTP/1.1" 200 -
+  ✓  "GET /smartsaver-ai-complete.html HTTP/1.1" 200 -
+  ✓  "GET /dashboard.html HTTP/1.1" 200 -
+  ✓  "GET / HTTP/1.1" 200 -
+  ✓  "GET / HTTP/1.1" 200 -
+  ✓  "GET / HTTP/1.1" 200 -
+  ✓  "GET /favicon.svg HTTP/1.1" 200 -
+  ✓  "GET / HTTP/1.1" 200 -
+
+  +---------------------------------------------+
+  |   SmartSaver AI  -  local server running    |
+  +---------------------------------------------+
+
+   Full site (one file)  http://localhost:8000/smartsaver-ai-complete.html
+   Landing page          http://localhost:8000/
+   Dashboard             http://localhost:8000/dashboard.html
+
+   Serving from          C:\Users\Yonatan\OneDrive\Desktop\YONATAN AI
+   Stop with             Ctrl+C
+
+  ✓  "GET / HTTP/1.1" 200 -
+
+  +---------------------------------------------+
+  |   SmartSaver AI  -  local server running    |
+  +---------------------------------------------+
+
+   Full site (one file)  http://localhost:8000/smartsaver-ai-complete.html
+   Landing page          http://localhost:8000/
+   Dashboard             http://localhost:8000/dashboard.html
+
+   Serving from          C:\Users\Yonatan\OneDrive\Desktop\YONATAN AI
+   Stop with             Ctrl+C
+
+  ✓  "GET /smartsaver-ai-complete.html HTTP/1.1" 200 -
+  ✓  "GET /smartsaver-ai-complete.html HTTP/1.1" 200 -
+  ✓  "GET / HTTP/1.1" 200 -
+  ✓  "GET / HTTP/1.1" 200 -
+  ✓  "GET / HTTP/1.1" 200 -
+  ✓  "GET /smartsaver-ai-complete.html HTTP/1.1" 200 -
+  ✓  "GET /smartsaver-ai-complete.html HTTP/1.1" 200 -
+  ✓  "GET /_probe.html HTTP/1.1" 200 -
+  ✓  "GET /smartsaver-ai-complete.html HTTP/1.1" 200 -
+  ✗  code 404, message File not found
+  ✗  "GET /favicon.ico HTTP/1.1" 404 -
+  ✓  "GET /_probe.html HTTP/1.1" 200 -
+  ✓  "GET /languages-backup/index-multilang.html HTTP/1.1" 200 -
+  ✗  code 404, message File not found
+  ✗  "GET /favicon.ico HTTP/1.1" 404 -
+  ✓  "GET /smartsaver-ai-complete.html HTTP/1.1" 200 -
+  ✓  "GET /_probe.html HTTP/1.1" 200 -
+  ✓  "GET /smartsaver-ai-complete.html HTTP/1.1" 200 -
+  ✗  code 404, message File not found
+  ✗  "GET /favicon.ico HTTP/1.1" 404 -
+  ✓  "GET /_shot.html?go=cta HTTP/1.1" 200 -
+  ✓  "GET /smartsaver-ai-complete.html HTTP/1.1" 200 -
+  ✗  code 404, message File not found
+  ✗  "GET /favicon.ico HTTP/1.1" 404 -
+  ✓  "GET /_seed.html HTTP/1.1" 200 -
+  ✓  "GET /_shot.html?go=cta HTTP/1.1" 200 -
+  ✓  "GET /smartsaver-ai-complete.html HTTP/1.1" 200 -
+  ✗  code 404, message File not found
+  ✗  "GET /favicon.ico HTTP/1.1" 404 -
+  ✓  "GET /_shot.html?go=cta HTTP/1.1" 200 -
+  ✓  "GET /smartsaver-ai-complete.html HTTP/1.1" 200 -
+  ✗  code 404, message File not found
+  ✗  "GET /favicon.ico HTTP/1.1" 404 -
+  ✓  "GET /_shot.html?go=cta HTTP/1.1" 200 -
+  ✓  "GET /smartsaver-ai-complete.html HTTP/1.1" 200 -
+  ✗  code 404, message File not found
+  ✗  "GET /favicon.ico HTTP/1.1" 404 -
+  ✓  "GET /_shot.html?go=cta HTTP/1.1" 200 -
+  ✓  "GET /smartsaver-ai-complete.html HTTP/1.1" 200 -
+  ✗  code 404, message File not found
+  ✗  "GET /favicon.ico HTTP/1.1" 404 -
+  ✓  "GET /_shot.html?go=menu HTTP/1.1" 200 -
+  ✓  "GET /smartsaver-ai-complete.html HTTP/1.1" 200 -
+  ✗  code 404, message File not found
+  ✗  "GET /favicon.ico HTTP/1.1" 404 -
+  ✓  "GET /_probe.html HTTP/1.1" 200 -
+  ✓  "GET /smartsaver-ai-complete.html HTTP/1.1" 200 -
+  ✗  code 404, message File not found
+  ✗  "GET /favicon.ico HTTP/1.1" 404 -
+  ✓  "GET /_visual.html HTTP/1.1" 200 -
+  ✓  "GET /_visual.html HTTP/1.1" 200 -
+  ✓  "GET /_visual.html HTTP/1.1" 200 -
+  ✓  "GET /_shot.html?go=cta HTTP/1.1" 200 -
+  ✓  "GET /smartsaver-ai-complete.html HTTP/1.1" 200 -
+  ✗  code 404, message File not found
+  ✗  "GET /favicon.ico HTTP/1.1" 404 -
+  ✓  "GET /_shot.html?go=menu HTTP/1.1" 200 -
+  ✓  "GET /smartsaver-ai-complete.html HTTP/1.1" 200 -
+  ✗  code 404, message File not found
+  ✗  "GET /favicon.ico HTTP/1.1" 404 -
+  ✓  "GET /_shot.html?go=menu HTTP/1.1" 200 -
+  ✓  "GET /smartsaver-ai-complete.html HTTP/1.1" 200 -
+  ✗  code 404, message File not found
+  ✗  "GET /favicon.ico HTTP/1.1" 404 -
+  ✓  "GET /_shot.html?go=menu HTTP/1.1" 200 -
+  ✓  "GET /smartsaver-ai-complete.html HTTP/1.1" 200 -
+  ✗  code 404, message File not found
+  ✗  "GET /favicon.ico HTTP/1.1" 404 -
+  ✓  "GET /smartsaver-ai-complete.html HTTP/1.1" 200 -
+  ✓  "GET /index.html HTTP/1.1" 200 -
+  ✓  "GET /favicon.svg HTTP/1.1" 200 -
+  ✓  "GET /dashboard.html HTTP/1.1" 200 -
+  ✓  "GET / HTTP/1.1" 200 -
+  ✓  "GET / HTTP/1.1" 200 -
+  ✓  "GET /dashboard.html HTTP/1.1" 200 -
+  ✓  "GET /index.html HTTP/1.1" 200 -
+  ✗  code 404, message File not found
+  ✗  "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 -
+  ✓  "GET /_shot.html?w=1400&h=260&go=top HTTP/1.1" 200 -
+  ✓  "GET /smartsaver-ai-complete.html HTTP/1.1" 200 -
+  ✗  code 404, message File not found
+  ✗  "GET /favicon.ico HTTP/1.1" 404 -
+  ✓  "GET /_shot.html?w=1400&h=420&go=settings HTTP/1.1" 200 -
+  ✓  "GET /smartsaver-ai-complete.html HTTP/1.1" 200 -
+  ✗  code 404, message File not found
+  ✗  "GET /favicon.ico HTTP/1.1" 404 -
+  ✓  "GET /_shot.html?w=390&h=844&go=menusettings HTTP/1.1" 200 -
+  ✓  "GET /smartsaver-ai-complete.html HTTP/1.1" 200 -
+  ✗  code 404, message File not found
+  ✗  "GET /favicon.ico HTTP/1.1" 404 -
+  ✓  "GET /_probe.html HTTP/1.1" 200 -
+  ✓  "GET /smartsaver-ai-complete.html HTTP/1.1" 200 -
+  ✗  code 404, message File not found
+  ✗  "GET /favicon.ico HTTP/1.1" 404 -
+  ✓  "GET /smartsaver-ai-complete.html HTTP/1.1" 200 -
+  ✓  "GET / HTTP/1.1" 200 -
+  ✗  code 404, message File not found
+  ✗  "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 -
+  ✗  code 404, message File not found
+  ✗  "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 -
+  ✗  code 404, message File not found
+  ✗  "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 -
+  ✓  "GET /dashboard.html HTTP/1.1" 200 -
+  ✓  "GET /index.html HTTP/1.1" 200 -
+  ✗  code 404, message File not found
+  ✗  "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 -
+  ✓  "GET /dashboard.html HTTP/1.1" 200 -
+  ✗  code 404, message File not found
+  ✗  "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 -
+  ✓  "GET /index.html HTTP/1.1" 200 -
+  ✗  code 404, message File not found
+  ✗  "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 -
+  ✓  "GET /dashboard.html HTTP/1.1" 200 -
+  ✓  "GET /index.html HTTP/1.1" 200 -
+  ✓  "GET / HTTP/1.1" 200 -
+  ✓  "GET /smartsaver-ai-complete.html HTTP/1.1" 200 -
+  ✓  "GET / HTTP/1.1" 200 -
+  ✓  "GET / HTTP/1.1" 200 -
+  ✓  "GET /dashboard.html HTTP/1.1" 200 -
+  ✓  "GET /index.html HTTP/1.1" 200 -
+  ✗  code 404, message File not found
+  ✗  "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 -
+  ✓  "GET / HTTP/1.1" 200 -
+  ✓  "GET / HTTP/1.1" 200 -
+  ✗  code 404, message File not found
+  ✗  "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 -
+  ✗  code 404, message File not found
+  ✗  "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 -
+  ✓  "GET / HTTP/1.1" 200 -
+  ✗  code 404, message File not found
+  ✗  "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 -
+  ✓  "GET /dashboard.html HTTP/1.1" 200 -
+  ✓  "GET /index.html HTTP/1.1" 200 -
+  ✓  "GET / HTTP/1.1" 200 -
+  ✓  "GET /dashboard.html HTTP/1.1" 200 -
+  ✓  "GET /index.html HTTP/1.1" 200 -
+  ✓  "GET /dashboard.html HTTP/1.1" 200 -
+  ✓  "GET /index.html HTTP/1.1" 200 -
+  ✓  "GET / HTTP/1.1" 200 -
+  ✓  "GET /dashboard.html HTTP/1.1" 200 -
+  ✓  "GET /index.html HTTP/1.1" 200 -
+  ✓  "GET / HTTP/1.1" 200 -
+  ✓  "GET /dashboard.html HTTP/1.1" 200 -
+  ✓  "GET /index.html HTTP/1.1" 200 -
+  ✓  "GET / HTTP/1.1" 200 -
+  ✓  "GET / HTTP/1.1" 200 -
+  ✓  "GET /dashboard.html HTTP/1.1" 200 -
+  ✓  "GET /index.html HTTP/1.1" 200 -
+  ✓  "GET / HTTP/1.1" 200 -
+  ✓  "GET /sw.js HTTP/1.1" 200 -
+  ✓  "GET / HTTP/1.1" 200 -
+  ✓  "GET /index.html HTTP/1.1" 200 -
+  ✓  "GET /dashboard.html HTTP/1.1" 200 -
+  ✓  "GET /manifest.webmanifest HTTP/1.1" 200 -
+  ✓  "GET /favicon.svg HTTP/1.1" 200 -
+  ✓  "GET /icon-192.png HTTP/1.1" 200 -
+  ✓  "GET /manifest.webmanifest HTTP/1.1" 200 -
+  ✓  "GET /icon-512.png HTTP/1.1" 200 -
+  ✓  "GET /icon-192.png HTTP/1.1" 200 -
+  ✓  "GET /icon-maskable-512.png HTTP/1.1" 200 -
+  ✓  "GET /dashboard.html HTTP/1.1" 200 -
+  ✓  "GET /sw.js HTTP/1.1" 200 -
+  ✓  "GET /index.html HTTP/1.1" 200 -
+  ✓  "GET /sw.js HTTP/1.1" 200 -
+  ✓  "GET / HTTP/1.1" 200 -
+  ✓  "GET /sw.js HTTP/1.1" 200 -
+  ✓  "GET /dashboard.html HTTP/1.1" 200 -
+  ✓  "GET /sw.js HTTP/1.1" 200 -
+  ✓  "GET / HTTP/1.1" 200 -
+  ✓  "GET /sw.js HTTP/1.1" 200 -
+  ✓  "GET /dashboard.html HTTP/1.1" 200 -
+  ✓  "GET /sw.js HTTP/1.1" 200 -
+  ✗  code 404, message File not found
+  ✗  "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 -
+  ✓  "GET /index.html HTTP/1.1" 200 -
+  ✓  "GET /sw.js HTTP/1.1" 200 -
+  ✓  "GET / HTTP/1.1" 200 -
+  ✓  "GET /sw.js HTTP/1.1" 200 -
+  ✓  "GET /dashboard.html HTTP/1.1" 200 -
+  ✓  "GET /sw.js HTTP/1.1" 200 -
+  ✓  "GET /index.html HTTP/1.1" 200 -
+  ✓  "GET /dashboard.html HTTP/1.1" 200 -
+  ✓  "GET /index.html HTTP/1.1" 200 -
+  ✓  "GET /sw.js HTTP/1.1" 200 -
+  ✓  "GET / HTTP/1.1" 200 -
+  ✓  "GET /sw.js HTTP/1.1" 200 -
+  ✓  "GET /dashboard.html HTTP/1.1" 200 -
+  ✓  "GET /sw.js HTTP/1.1" 200 -
+  ✓  "GET /index.html HTTP/1.1" 200 -
+  ✓  "GET /sw.js HTTP/1.1" 200 -
+  ✓  "GET / HTTP/1.1" 200 -
+  ✓  "GET /sw.js HTTP/1.1" 200 -
+  ✓  "GET / HTTP/1.1" 200 -
+  ✓  "GET /sw.js HTTP/1.1" 200 -
+  ✓  "GET / HTTP/1.1" 200 -
+  ✓  "GET /supabase/ss-supabase.js HTTP/1.1" 200 -
+  ✓  "GET /sw.js HTTP/1.1" 200 -
+  ✓  "GET /dashboard.html HTTP/1.1" 200 -
+  ✓  "GET / HTTP/1.1" 200 -
+  ✓  "GET /index.html HTTP/1.1" 200 -
+  ✓  "GET /supabase/ss-supabase.js HTTP/1.1" 200 -
+  ✓  "GET /favicon.svg HTTP/1.1" 200 -
+  ✓  "GET /icon-192.png HTTP/1.1" 200 -
+  ✓  "GET /manifest.webmanifest HTTP/1.1" 200 -
+  ✓  "GET /icon-512.png HTTP/1.1" 200 -
+  ✓  "GET /icon-maskable-512.png HTTP/1.1" 200 -
+  ✓  "GET / HTTP/1.1" 200 -
+  ✓  "GET /sw.js HTTP/1.1" 200 -
+  ✓  "GET /dashboard.html HTTP/1.1" 200 -
+  ✓  "GET /index.html HTTP/1.1" 200 -
+  ✓  "GET /sw.js HTTP/1.1" 200 -
+  ✓  "GET /sw.js HTTP/1.1" 200 -
+  ✓  "GET /index.html HTTP/1.1" 200 -
+  ✓  "GET /sw.js HTTP/1.1" 200 -
+  ✓  "GET /dashboard.html HTTP/1.1" 200 -
+  ✓  "GET / HTTP/1.1" 200 -
+  ✓  "GET /sw.js HTTP/1.1" 200 -
+  ✓  "GET / HTTP/1.1" 200 -
+  ✓  "GET /sw.js HTTP/1.1" 200 -
+  ✓  "GET /dashboard.html HTTP/1.1" 200 -
+  ✓  "GET /sw.js HTTP/1.1" 200 -
+  ✓  "GET /index.html HTTP/1.1" 200 -
+  ✓  "GET /sw.js HTTP/1.1" 200 -
+  ✓  "GET / HTTP/1.1" 200 -
+  ✓  "GET /sw.js HTTP/1.1" 200 -
+  ✓  "GET / HTTP/1.1" 200 -
+  ✓  "GET /sw.js HTTP/1.1" 200 -
+  ✓  "GET / HTTP/1.1" 200 -
+  ✓  "GET /sw.js HTTP/1.1" 200 -
+  ✓  "GET / HTTP/1.1" 200 -
+  ✓  "GET /sw.js HTTP/1.1" 200 -
+  ✓  "GET / HTTP/1.1" 200 -
+  ✓  "GET /index.html HTTP/1.1" 200 -
+  ✓  "GET /dashboard.html HTTP/1.1" 200 -
+  ✓  "GET /supabase/ss-supabase.js HTTP/1.1" 200 -
+  ✓  "GET /manifest.webmanifest HTTP/1.1" 200 -
+  ✓  "GET /favicon.svg HTTP/1.1" 200 -
+  ✓  "GET /icon-192.png HTTP/1.1" 200 -
+  ✓  "GET /icon-512.png HTTP/1.1" 200 -
+  ✓  "GET /icon-maskable-512.png HTTP/1.1" 200 -
+  ✓  "GET / HTTP/1.1" 200 -
+  ✓  "GET /sw.js HTTP/1.1" 200 -
+  ✓  "GET / HTTP/1.1" 200 -
+  ✓  "GET /sw.js HTTP/1.1" 200 -
+  ✓  "GET / HTTP/1.1" 200 -
+  ✓  "GET /sw.js HTTP/1.1" 200 -
+  ✓  "GET / HTTP/1.1" 200 -
+  ✓  "GET /index.html HTTP/1.1" 200 -
+  ✓  "GET /dashboard.html HTTP/1.1" 200 -
+  ✓  "GET /supabase/ss-supabase.js HTTP/1.1" 200 -
+  ✓  "GET /manifest.webmanifest HTTP/1.1" 200 -
+  ✓  "GET /favicon.svg HTTP/1.1" 200 -
+  ✓  "GET /icon-192.png HTTP/1.1" 200 -
+  ✓  "GET /icon-512.png HTTP/1.1" 200 -
+  ✓  "GET /icon-maskable-512.png HTTP/1.1" 200 -
+  ✓  "GET / HTTP/1.1" 200 -
+  ✓  "GET /sw.js HTTP/1.1" 200 -
+  ✓  "GET / HTTP/1.1" 200 -
+  ✓  "GET /sw.js HTTP/1.1" 200 -
+  ✓  "GET / HTTP/1.1" 200 -
+  ✓  "GET /sw.js HTTP/1.1" 200 -
+  ✓  "GET / HTTP/1.1" 200 -
+  ✓  "GET /sw.js HTTP/1.1" 200 -
+  ✓  "GET / HTTP/1.1" 200 -
+  ✓  "GET /sw.js HTTP/1.1" 200 -
+  ✓  "GET / HTTP/1.1" 200 -
+  ✓  "GET /index.html HTTP/1.1" 200 -
+  ✓  "GET /dashboard.html HTTP/1.1" 200 -
+  ✓  "GET /supabase/ss-supabase.js HTTP/1.1" 200 -
+  ✓  "GET / HTTP/1.1" 200 -
+  ✓  "GET /favicon.svg HTTP/1.1" 200 -
+  ✓  "GET /manifest.webmanifest HTTP/1.1" 200 -
+  ✓  "GET /icon-192.png HTTP/1.1" 200 -
+  ✓  "GET /icon-512.png HTTP/1.1" 200 -
+  ✓  "GET /supabase/ss-supabase.js HTTP/1.1" 200 -
+  ✓  "GET /icon-maskable-512.png HTTP/1.1" 200 -
+  ✓  "GET /favicon.svg HTTP/1.1" 200 -
+  ✓  "GET /manifest.webmanifest HTTP/1.1" 200 -
+  ✓  "GET /icon-192.png HTTP/1.1" 200 -
+  ✓  "GET /dashboard.html HTTP/1.1" 200 -
+  ✓  "GET /supabase/ss-supabase.js HTTP/1.1" 200 -
+  ✓  "GET /index.html HTTP/1.1" 200 -
+  ✓  "GET /supabase/ss-supabase.js HTTP/1.1" 200 -
+  ✓  "GET /sw.js HTTP/1.1" 200 -
+  ✓  "GET /sw.js HTTP/1.1" 200 -
+  ✓  "GET /index.html HTTP/1.1" 200 -
+  ✓  "GET /supabase/ss-supabase.js HTTP/1.1" 200 -
+  ✓  "GET /sw.js HTTP/1.1" 200 -
+  ✓  "GET /index.html HTTP/1.1" 200 -
+  ✓  "GET /supabase/ss-supabase.js HTTP/1.1" 200 -
+  ✓  "GET /sw.js HTTP/1.1" 200 -
+  ✓  "GET /index.html HTTP/1.1" 200 -
+  ✓  "GET /supabase/ss-supabase.js HTTP/1.1" 200 -
+  ✓  "GET /sw.js HTTP/1.1" 200 -
+  ✓  "GET /index.html HTTP/1.1" 200 -
+  ✓  "GET /supabase/ss-supabase.js HTTP/1.1" 200 -
+  ✓  "GET /sw.js HTTP/1.1" 200 -
+  ✓  "GET / HTTP/1.1" 200 -
+  ✓  "GET /supabase/ss-supabase.js HTTP/1.1" 200 -
+  ✓  "GET /sw.js HTTP/1.1" 200 -
+  ✓  "GET /dashboard.html HTTP/1.1" 200 -
+  ✓  "GET /index.html HTTP/1.1" 200 -
+  ✓  "GET / HTTP/1.1" 200 -
+  ✓  "GET /supabase/ss-supabase.js HTTP/1.1" 200 -
+  ✓  "GET /favicon.svg HTTP/1.1" 200 -
+  ✓  "GET /icon-192.png HTTP/1.1" 200 -
+  ✓  "GET /manifest.webmanifest HTTP/1.1" 200 -
+  ✓  "GET /icon-512.png HTTP/1.1" 200 -
+  ✓  "GET /icon-maskable-512.png HTTP/1.1" 200 -
+  ✓  "GET / HTTP/1.1" 200 -
+  ✓  "GET /supabase/ss-supabase.js HTTP/1.1" 200 -
+  ✓  "GET /sw.js HTTP/1.1" 200 -
+  ✓  "GET /index.html HTTP/1.1" 200 -
+  ✓  "GET / HTTP/1.1" 200 -
+  ✓  "GET /supabase/ss-supabase.js HTTP/1.1" 200 -
+  ✓  "GET /sw.js HTTP/1.1" 200 -
+  ✓  "GET / HTTP/1.1" 200 -
+  ✓  "GET /supabase/ss-supabase.js HTTP/1.1" 200 -
+  ✓  "GET /favicon.svg HTTP/1.1" 200 -
+  ✓  "GET /manifest.webmanifest HTTP/1.1" 200 -
+  ✓  "GET / HTTP/1.1" 200 -
+  ✓  "GET /supabase/ss-supabase.js HTTP/1.1" 200 -
+  ✓  "GET /manifest.webmanifest HTTP/1.1" 200 -
+  ✓  "GET /favicon.svg HTTP/1.1" 200 -
+  ✓  "GET /icon-192.png HTTP/1.1" 200 -
+  ✓  "GET / HTTP/1.1" 200 -
+  ✓  "GET /supabase/ss-supabase.js HTTP/1.1" 200 -
+  ✓  "GET /sw.js HTTP/1.1" 200 -
+  ✓  "GET / HTTP/1.1" 200 -
+  ✓  "GET /supabase/ss-supabase.js HTTP/1.1" 200 -
+  ✓  "GET /sw.js HTTP/1.1" 200 -
+  ✓  "GET /dashboard.html HTTP/1.1" 200 -
+  ✓  "GET / HTTP/1.1" 200 -
+  ✓  "GET /index.html HTTP/1.1" 200 -
+  ✓  "GET /supabase/ss-supabase.js HTTP/1.1" 200 -
+  ✓  "GET /manifest.webmanifest HTTP/1.1" 200 -
+  ✓  "GET /favicon.svg HTTP/1.1" 200 -
+  ✓  "GET /icon-192.png HTTP/1.1" 200 -
+  ✓  "GET /icon-512.png HTTP/1.1" 200 -
+  ✓  "GET /icon-maskable-512.png HTTP/1.1" 200 -
+  ✓  "GET / HTTP/1.1" 200 -
+  ✓  "GET /supabase/ss-supabase.js HTTP/1.1" 200 -
+  ✓  "GET / HTTP/1.1" 200 -
+  ✓  "GET /supabase/ss-supabase.js HTTP/1.1" 200 -
+  ✓  "GET /sw.js HTTP/1.1" 200 -
+  ✓  "GET /dashboard.html HTTP/1.1" 200 -
+  ✓  "GET /supabase/ss-supabase.js HTTP/1.1" 200 -
+  ✓  "GET /sw.js HTTP/1.1" 200 -
+  ✓  "GET /index.html HTTP/1.1" 200 -
+  ✓  "GET /supabase/ss-supabase.js HTTP/1.1" 200 -
+  ✓  "GET /sw.js HTTP/1.1" 200 -
+  ✓  "GET /index.html HTTP/1.1" 200 -
+  ✓  "GET /supabase/ss-supabase.js HTTP/1.1" 200 -
+  ✓  "GET /sw.js HTTP/1.1" 200 -
+  ✓  "GET / HTTP/1.1" 200 -
+  ✓  "GET /supabase/ss-supabase.js HTTP/1.1" 200 -
+  ✓  "GET /sw.js HTTP/1.1" 200 -
+  ✓  "GET /dashboard.html HTTP/1.1" 200 -
+  ✓  "GET /supabase/ss-supabase.js HTTP/1.1" 200 -
+  ✓  "GET /sw.js HTTP/1.1" 200 -
+  ✓  "GET /index.html HTTP/1.1" 200 -
+  ✓  "GET /supabase/ss-supabase.js HTTP/1.1" 200 -
+  ✓  "GET /sw.js HTTP/1.1" 200 -
+  ✓  "GET / HTTP/1.1" 200 -
+  ✓  "GET /supabase/ss-supabase.js HTTP/1.1" 200 -
+  ✓  "GET /sw.js HTTP/1.1" 200 -
+  ✓  "GET / HTTP/1.1" 200 -
+  ✓  "GET /dashboard.html HTTP/1.1" 200 -
+  ✓  "GET /index.html HTTP/1.1" 200 -
+  ✓  "GET /supabase/ss-supabase.js HTTP/1.1" 200 -
+  ✓  "GET / HTTP/1.1" 200 -
+  ✓  "GET /manifest.webmanifest HTTP/1.1" 200 -
+  ✓  "GET /favicon.svg HTTP/1.1" 200 -
+  ✓  "GET /icon-192.png HTTP/1.1" 200 -
+  ✓  "GET /icon-512.png HTTP/1.1" 200 -
+  ✓  "GET /icon-maskable-512.png HTTP/1.1" 200 -
+  ✓  "GET /supabase/ss-supabase.js HTTP/1.1" 200 -
+  ✓  "GET /favicon.svg HTTP/1.1" 200 -
+  ✓  "GET /manifest.webmanifest HTTP/1.1" 200 -
+  ✓  "GET /icon-192.png HTTP/1.1" 200 -
+  ✓  "GET / HTTP/1.1" 200 -
+  ✓  "GET /supabase/ss-supabase.js HTTP/1.1" 200 -
+  ✓  "GET /sw.js HTTP/1.1" 200 -
+  ✓  "GET /dashboard.html HTTP/1.1" 200 -
+  ✓  "GET /supabase/ss-supabase.js HTTP/1.1" 200 -
+  ✓  "GET /sw.js HTTP/1.1" 200 -
+  ✓  "GET /index.html HTTP/1.1" 200 -
+  ✓  "GET /supabase/ss-supabase.js HTTP/1.1" 200 -
+  ✓  "GET /sw.js HTTP/1.1" 200 -
+  ✓  "GET /dashboard.html HTTP/1.1" 200 -
+  ✓  "GET /supabase/ss-supabase.js HTTP/1.1" 200 -
+  ✓  "GET /sw.js HTTP/1.1" 200 -
+  ✓  "GET /dashboard.html HTTP/1.1" 200 -
+  ✓  "GET /index.html HTTP/1.1" 200 -
+  ✓  "GET / HTTP/1.1" 200 -
+  ✓  "GET /supabase/ss-supabase.js HTTP/1.1" 200 -
+  ✓  "GET /favicon.svg HTTP/1.1" 200 -
+  ✓  "GET /manifest.webmanifest HTTP/1.1" 200 -
+  ✓  "GET /icon-192.png HTTP/1.1" 200 -
+  ✓  "GET /icon-512.png HTTP/1.1" 200 -
+  ✓  "GET /icon-maskable-512.png HTTP/1.1" 200 -
+  ✓  "GET /index.html HTTP/1.1" 200 -
+  ✓  "GET /supabase/ss-supabase.js HTTP/1.1" 200 -
+  ✓  "GET /sw.js HTTP/1.1" 200 -
+  ✓  "GET / HTTP/1.1" 200 -
+  ✓  "GET /supabase/ss-supabase.js HTTP/1.1" 200 -
+  ✓  "GET / HTTP/1.1" 200 -
+  ✓  "GET /supabase/ss-supabase.js HTTP/1.1" 200 -
+  ✓  "GET /favicon.svg HTTP/1.1" 200 -
+  ✓  "GET /manifest.webmanifest HTTP/1.1" 200 -
+  ✓  "GET /icon-192.png HTTP/1.1" 200 -
+  ✓  "GET /sw.js HTTP/1.1" 200 -
+  ✓  "GET / HTTP/1.1" 200 -
+  ✓  "GET /supabase/ss-supabase.js HTTP/1.1" 200 -
+  ✓  "GET /sw.js HTTP/1.1" 200 -
+  ✓  "GET /dashboard.html HTTP/1.1" 200 -
+  ✓  "GET /supabase/ss-supabase.js HTTP/1.1" 200 -
+  ✓  "GET /sw.js HTTP/1.1" 200 -
+  ✓  "GET /index.html HTTP/1.1" 200 -
+  ✓  "GET /supabase/ss-supabase.js HTTP/1.1" 200 -
+  ✓  "GET /sw.js HTTP/1.1" 200 -
+  ✓  "GET /dashboard.html HTTP/1.1" 200 -
+  ✓  "GET /supabase/ss-supabase.js HTTP/1.1" 200 -
+  ✓  "GET /sw.js HTTP/1.1" 200 -
+  ✓  "GET /index.html HTTP/1.1" 200 -
+  ✓  "GET /supabase/ss-supabase.js HTTP/1.1" 200 -
+  ✓  "GET /sw.js HTTP/1.1" 200 -
+  ✓  "GET /index.html HTTP/1.1" 200 -
+  ✓  "GET /supabase/ss-supabase.js HTTP/1.1" 200 -
+  ✓  "GET /sw.js HTTP/1.1" 200 -
+  ✓  "GET /index.html HTTP/1.1" 200 -
+  ✓  "GET / HTTP/1.1" 200 -
+  ✓  "GET /dashboard.html HTTP/1.1" 200 -
+  ✓  "GET /supabase/ss-supabase.js HTTP/1.1" 200 -
+  ✓  "GET /favicon.svg HTTP/1.1" 200 -
+  ✓  "GET /manifest.webmanifest HTTP/1.1" 200 -
+  ✓  "GET /icon-192.png HTTP/1.1" 200 -
+  ✓  "GET /icon-512.png HTTP/1.1" 200 -
+  ✓  "GET /icon-maskable-512.png HTTP/1.1" 200 -
+  ✓  "GET /dashboard.html HTTP/1.1" 200 -
+  ✓  "GET /supabase/ss-supabase.js HTTP/1.1" 200 -
+  ✓  "GET /sw.js HTTP/1.1" 200 -
+  ✓  "GET /index.html HTTP/1.1" 200 -
+  ✓  "GET /supabase/ss-supabase.js HTTP/1.1" 200 -
+  ✓  "GET /sw.js HTTP/1.1" 200 -
+  ✓  "GET /dashboard.html HTTP/1.1" 200 -
+  ✓  "GET /supabase/ss-supabase.js HTTP/1.1" 200 -
+  ✓  "GET /index.html HTTP/1.1" 200 -
+  ✓  "GET /supabase/ss-supabase.js HTTP/1.1" 200 -
+  ✓  "GET /sw.js HTTP/1.1" 200 -
+  ✓  "GET /index.html?error=access_denied&error_description= HTTP/1.1" 200 -
+  ✓  "GET /supabase/ss-supabase.js HTTP/1.1" 200 -
+  ✓  "GET /sw.js HTTP/1.1" 200 -
+  ✓  "GET /index.html?error=access_denied&error_description= HTTP/1.1" 200 -
+  ✓  "GET /supabase/ss-supabase.js HTTP/1.1" 200 -
+  ✓  "GET /favicon.svg HTTP/1.1" 200 -
+  ✓  "GET /manifest.webmanifest HTTP/1.1" 200 -
+  ✓  "GET /icon-192.png HTTP/1.1" 200 -
+  ✓  "GET /index.html HTTP/1.1" 200 -
+  ✓  "GET /supabase/ss-supabase.js HTTP/1.1" 200 -
+  ✓  "GET /sw.js HTTP/1.1" 200 -
+  ✓  "GET /dashboard.html HTTP/1.1" 200 -
+  ✓  "GET /supabase/ss-supabase.js HTTP/1.1" 200 -
+  ✓  "GET /sw.js HTTP/1.1" 200 -
+  ✓  "GET /index.html HTTP/1.1" 200 -
+  ✓  "GET /supabase/ss-supabase.js HTTP/1.1" 200 -
+  ✓  "GET /sw.js HTTP/1.1" 200 -
+  ✓  "GET /dashboard.html HTTP/1.1" 200 -
+  ✓  "GET /supabase/ss-supabase.js HTTP/1.1" 200 -
+  ✓  "GET /sw.js HTTP/1.1" 200 -
+  ✓  "GET /dashboard.html HTTP/1.1" 200 -
+  ✓  "GET /supabase/ss-supabase.js HTTP/1.1" 200 -
+  ✓  "GET /manifest.webmanifest HTTP/1.1" 200 -
+  ✓  "GET /favicon.svg HTTP/1.1" 200 -
+  ✓  "GET /icon-192.png HTTP/1.1" 200 -
+  ✓  "GET /dashboard.html HTTP/1.1" 200 -
+  ✓  "GET /supabase/ss-supabase.js HTTP/1.1" 200 -
+  ✓  "GET /favicon.svg HTTP/1.1" 200 -
+  ✓  "GET /manifest.webmanifest HTTP/1.1" 200 -
+  ✓  "GET /icon-192.png HTTP/1.1" 200 -
+  ✓  "GET /index.html HTTP/1.1" 200 -
+  ✓  "GET /supabase/ss-supabase.js HTTP/1.1" 200 -
+  ✓  "GET /sw.js HTTP/1.1" 200 -
+  ✓  "GET / HTTP/1.1" 200 -
+  ✓  "GET /dashboard.html HTTP/1.1" 200 -
+  ✓  "GET /supabase/ss-supabase.js HTTP/1.1" 200 -
+  ✓  "GET /index.html HTTP/1.1" 200 -
+  ✓  "GET /favicon.svg HTTP/1.1" 200 -
+  ✓  "GET /manifest.webmanifest HTTP/1.1" 200 -
+  ✓  "GET /icon-192.png HTTP/1.1" 200 -
+  ✓  "GET /dashboard.html HTTP/1.1" 200 -
+  ✓  "GET /icon-512.png HTTP/1.1" 200 -
+  ✓  "GET /icon-maskable-512.png HTTP/1.1" 200 -
+  ✓  "GET /supabase/ss-supabase.js HTTP/1.1" 200 -
+  ✓  "GET /dashboard.html HTTP/1.1" 200 -
+  ✓  "GET /supabase/ss-supabase.js HTTP/1.1" 200 -
+  ✓  "GET /manifest.webmanifest HTTP/1.1" 200 -
+  ✓  "GET /icon-192.png HTTP/1.1" 200 -
+  ✓  "GET /favicon.svg HTTP/1.1" 200 -
+  ✓  "GET /index.html HTTP/1.1" 200 -
+  ✓  "GET /supabase/ss-supabase.js HTTP/1.1" 200 -
+  ✓  "GET /sw.js HTTP/1.1" 200 -
+  ✓  "GET /index.html HTTP/1.1" 200 -
+  ✓  "GET /supabase/ss-supabase.js HTTP/1.1" 200 -
+  ✓  "GET /favicon.svg HTTP/1.1" 200 -
+  ✓  "GET /manifest.webmanifest HTTP/1.1" 200 -
+  ✓  "GET /icon-192.png HTTP/1.1" 200 -
+  ✓  "GET /index.html HTTP/1.1" 200 -
+  ✓  "GET /supabase/ss-supabase.js HTTP/1.1" 200 -
+  ✓  "GET /favicon.svg HTTP/1.1" 200 -
+  ✓  "GET /manifest.webmanifest HTTP/1.1" 200 -
+  ✓  "GET /icon-192.png HTTP/1.1" 200 -
+  ✓  "GET /index.html HTTP/1.1" 200 -
+  ✓  "GET /supabase/ss-supabase.js HTTP/1.1" 200 -
+  ✓  "GET /sw.js HTTP/1.1" 200 -
+  ✓  "GET /index.html HTTP/1.1" 200 -
+  ✓  "GET / HTTP/1.1" 200 -
+  ✓  "GET /dashboard.html HTTP/1.1" 200 -
+  ✓  "GET /supabase/ss-supabase.js HTTP/1.1" 200 -
+  ✓  "GET /favicon.svg HTTP/1.1" 200 -
+  ✓  "GET /manifest.webmanifest HTTP/1.1" 200 -
+  ✓  "GET /icon-192.png HTTP/1.1" 200 -
+  ✓  "GET /icon-512.png HTTP/1.1" 200 -
+  ✓  "GET /icon-maskable-512.png HTTP/1.1" 200 -
+  ✓  "GET /dashboard.html HTTP/1.1" 200 -
+  ✓  "GET /supabase/ss-supabase.js HTTP/1.1" 200 -
+  ✓  "GET /index.html HTTP/1.1" 200 -
+  ✓  "GET /supabase/ss-supabase.js HTTP/1.1" 200 -
+  ✓  "GET /sw.js HTTP/1.1" 200 -
+  ✓  "GET /sw.js HTTP/1.1" 200 -
+  ✓  "GET /index.html HTTP/1.1" 200 -
+  ✓  "GET /supabase/ss-supabase.js HTTP/1.1" 200 -
+  ✓  "GET /sw.js HTTP/1.1" 200 -
+  ✓  "GET / HTTP/1.1" 200 -
+  ✓  "GET /supabase/ss-supabase.js HTTP/1.1" 200 -
+  ✓  "GET /sw.js HTTP/1.1" 200 -
+  ✓  "GET / HTTP/1.1" 200 -
+  ✓  "GET /supabase/ss-supabase.js HTTP/1.1" 200 -
+  ✓  "GET /sw.js HTTP/1.1" 200 -
+  ✓  "GET / HTTP/1.1" 200 -
+  ✓  "GET /supabase/ss-supabase.js HTTP/1.1" 200 -
+  ✓  "GET /sw.js HTTP/1.1" 200 -
+  ✓  "GET /index.html HTTP/1.1" 200 -
+  ✓  "GET / HTTP/1.1" 200 -
+  ✓  "GET /dashboard.html HTTP/1.1" 200 -
+  ✓  "GET /supabase/ss-supabase.js HTTP/1.1" 200 -
+  ✓  "GET /favicon.svg HTTP/1.1" 200 -
+  ✓  "GET /manifest.webmanifest HTTP/1.1" 200 -
+  ✓  "GET /icon-192.png HTTP/1.1" 200 -
+  ✓  "GET /icon-512.png HTTP/1.1" 200 -
+  ✓  "GET /icon-maskable-512.png HTTP/1.1" 200 -
+  ✓  "GET /dashboard.html HTTP/1.1" 200 -
+  ✓  "GET /supabase/ss-supabase.js HTTP/1.1" 200 -
+  ✓  "GET /sw.js HTTP/1.1" 200 -
+  ✓  "GET /index.html HTTP/1.1" 200 -
+  ✓  "GET /supabase/ss-supabase.js HTTP/1.1" 200 -
+  ✓  "GET /sw.js HTTP/1.1" 200 -
+  ✓  "GET /dashboard.html HTTP/1.1" 200 -
+  ✓  "GET /supabase/ss-supabase.js HTTP/1.1" 200 -
+  ✓  "GET /sw.js HTTP/1.1" 200 -
+  ✓  "GET /dashboard.html HTTP/1.1" 200 -
+  ✓  "GET /supabase/ss-supabase.js HTTP/1.1" 200 -
+  ✓  "GET /favicon.svg HTTP/1.1" 200 -
+  ✓  "GET /manifest.webmanifest HTTP/1.1" 200 -
+  ✓  "GET /icon-192.png HTTP/1.1" 200 -
+  ✓  "GET /index.html HTTP/1.1" 200 -
+  ✓  "GET /supabase/ss-supabase.js HTTP/1.1" 200 -
+  ✓  "GET /index.html HTTP/1.1" 200 -
+  ✓  "GET /supabase/ss-supabase.js HTTP/1.1" 200 -
+  ✓  "GET /sw.js HTTP/1.1" 200 -
+  ✓  "GET /manifest.webmanifest HTTP/1.1" 200 -
+  ✓  "GET / HTTP/1.1" 200 -
+  ✓  "GET /index.html HTTP/1.1" 200 -
+  ✓  "GET /dashboard.html HTTP/1.1" 200 -
+  ✓  "GET /supabase/ss-supabase.js HTTP/1.1" 200 -
+  ✓  "GET /icon-192.png HTTP/1.1" 200 -
+  ✓  "GET /favicon.svg HTTP/1.1" 200 -
+  ✓  "GET /manifest.webmanifest HTTP/1.1" 200 -
+  ✓  "GET /icon-192.png HTTP/1.1" 200 -
+  ✓  "GET /favicon.svg HTTP/1.1" 200 -
+  ✓  "GET /icon-maskable-512.png HTTP/1.1" 200 -
+  ✓  "GET /icon-512.png HTTP/1.1" 200 -
+  ✓  "GET /index.html HTTP/1.1" 200 -
+  ✓  "GET /supabase/ss-supabase.js HTTP/1.1" 200 -
+  ✓  "GET /dashboard.html HTTP/1.1" 200 -
+  ✓  "GET /supabase/ss-supabase.js HTTP/1.1" 200 -
+  ✓  "GET /sw.js HTTP/1.1" 200 -
+  ✓  "GET /sw.js HTTP/1.1" 200 -
+  ✓  "GET /index.html HTTP/1.1" 200 -
+  ✓  "GET /supabase/ss-supabase.js HTTP/1.1" 200 -
+  ✓  "GET /sw.js HTTP/1.1" 200 -
+  ✓  "GET / HTTP/1.1" 200 -
+  ✓  "GET /supabase/ss-supabase.js HTTP/1.1" 200 -
+  ✓  "GET /sw.js HTTP/1.1" 200 -
+  ✓  "GET / HTTP/1.1" 200 -
+  ✓  "GET /supabase/ss-supabase.js HTTP/1.1" 200 -
+  ✓  "GET /sw.js HTTP/1.1" 200 -
+  ✓  "GET /dashboard.html HTTP/1.1" 200 -
+  ✓  "GET /supabase/ss-supabase.js HTTP/1.1" 200 -
+  ✓  "GET /sw.js HTTP/1.1" 200 -
+  ✓  "GET /index.html HTTP/1.1" 200 -
+  ✓  "GET /supabase/ss-supabase.js HTTP/1.1" 200 -
+  ✓  "GET /sw.js HTTP/1.1" 200 -
+  ✓  "GET /sw.js HTTP/1.1" 200 -
+  ✓  "GET /sw.js HTTP/1.1" 200 -

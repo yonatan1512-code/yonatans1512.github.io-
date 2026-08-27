@@ -1,0 +1,11 @@
+﻿הקישורים שלי - SmartSaver AI
+==============================
+
+הטבלה (Google Sheets):
+https://docs.google.com/spreadsheets/d/1htck3ffvNYu80DAl9-6KE1FGThVG2g4qsDE4VyROo6g/edit
+
+כתובת הסקריפט (Web app /exec) - זו שמודבקת בקבצי ה-HTML:
+https://script.google.com/macros/s/AKfycbxCXrb5EgNSsisggD30-89mkPYE5uMpZlVXZKD05WQSXR_h4u6sHIMi2c5yMZeSATVx/exec
+
+האתר המקומי:
+http://localhost:8000

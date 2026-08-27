@@ -1,0 +1,1737 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SmartSaver AI</title>
+
+<!-- Google Sheets — paste the same /exec URL you put in index.html.
+     In the single-file build the landing page's config is used instead. -->
+<script>
+window.SS_SHEETS = window.SS_SHEETS || {
+  url: 'https://script.google.com/macros/s/AKfycbzpoeSX_Elpd1Q_AwsP4KrYKwn16cPABWwpVzwKud2M9_pMJwECls8qB1OxJ4VR23WcFQ/exec',
+  secret: ''
+};
+</script>
+
+<!-- Supabase — אותם שני ערכים בדיוק שבראש index.html. חייבים להיות זהים:
+     שני העמודים חולקים את אותו סשן ואת אותה רשומה.
+     בקובץ הבודד ההגדרה של דף הנחיתה היא זו שתופסת.
+     הוראות: supabase/README.md -->
+<script>
+window.SS_SUPABASE = window.SS_SUPABASE || {
+  url:     'https://iwnahegtlsdskdezqlsq.supabase.co',
+  anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml3bmFoZWd0bHNkc2tkZXpxbHNxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc0Nzc0MzQsImV4cCI6MjEwMzA1MzQzNH0.Tek0At-g2zb7-cRq_0TNcORbzb1ike5MbqIZ4EBFm4U'
+};
+</script>
+<script src="supabase/ss-supabase.js"></script>
+
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+
+<!-- ===== ADD TO HOME SCREEN ===== -->
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#071A3B">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="SmartSaver">
+<link rel="apple-touch-icon" href="icon-192.png">
+<script>
+/* see index.html — refused on file:// and absent from the single-file build */
+(function(){
+  if(!('serviceWorker' in navigator)) return;
+  if(location.protocol === 'file:' || window.__ssSingleFile) return;
+  window.addEventListener('load', function(){
+    navigator.serviceWorker.register('sw.js').catch(function(){});
+  });
+})();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@500;700;800;900&family=Heebo:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#071A3B;
+    --navy-2:#0D2557;
+    --blue:#1F5EFF;
+    --blue-2:#3E7BFF;
+    --blue-light:#7FB0FF;
+    --ice:#EEF4FF;
+    --white:#FFFFFF;
+    --black:#05070C;
+    --gold:#C9A961;
+    --gold-light:#E4CD94;
+    --green:#3DDC97;
+    --red:#FF7A7A;
+    --line: rgba(255,255,255,0.12);
+    --radius: 20px;
+    /* kept in sync with the landing page's Background picker */
+    --accent-rgb: 63 123 255;
+    --accent-light-rgb: 127 176 255;
+  }
+
+  *{box-sizing:border-box;}
+  /* our flex/grid rules would otherwise beat the UA's [hidden] rule */
+  [hidden]{display:none !important;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0; min-height:100vh;
+    font-family:'Heebo','Arial Hebrew',Arial,sans-serif;
+    color:#C7D2E8;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+    background:
+      radial-gradient(900px 520px at 88% -6%, rgb(var(--accent-rgb) / 0.35), transparent 60%),
+      radial-gradient(760px 480px at 4% 100%, rgba(139,92,255,0.22), transparent 62%),
+      linear-gradient(180deg,
+        color-mix(in srgb, rgb(var(--accent-rgb)) 32%, var(--navy)) 0%,
+        color-mix(in srgb, rgb(var(--accent-rgb)) 18%, #08183a) 46%,
+        color-mix(in srgb, rgb(var(--accent-rgb)) 10%, #060F26) 100%);
+    background-attachment:fixed;
+    transition:background .5s ease;
+  }
+  html.theme-dark body{
+    background:
+      radial-gradient(900px 520px at 88% -6%, rgb(var(--accent-rgb) / 0.16), transparent 60%),
+      radial-gradient(760px 480px at 4% 100%, rgba(139,92,255,0.14), transparent 62%),
+      linear-gradient(180deg,
+        color-mix(in srgb, rgb(var(--accent-rgb)) 14%, #060D1F) 0%,
+        color-mix(in srgb, rgb(var(--accent-rgb)) 8%, #04091A) 50%,
+        color-mix(in srgb, rgb(var(--accent-rgb)) 5%, #02050B) 100%);
+  }
+  h1,h2,h3,.display{font-family:'Rubik','Arial Hebrew',Arial,sans-serif; font-weight:800; letter-spacing:-0.01em; margin:0;}
+  p{margin:0;}
+  a{color:inherit; text-decoration:none;}
+  button{font-family:inherit; cursor:pointer; border:none;}
+  input{font-family:inherit;}
+  svg{display:block;}
+  .container{max-width:1240px; margin:0 auto; padding:0 28px;}
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important;}
+  }
+
+  /* ===== TOPBAR ===== */
+  .topbar{
+    position:sticky; top:0; z-index:60;
+    background:rgba(6,16,38,0.72);
+    backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px);
+    border-bottom:1px solid var(--line);
+  }
+  .topbar-inner{display:flex; align-items:center; gap:14px; padding:14px 0;}
+  .brand{display:flex; align-items:center; gap:11px; color:var(--white); font-family:'Rubik'; font-weight:800; font-size:1.05rem; white-space:nowrap;}
+  .brand-mark{
+    width:34px; height:34px; border-radius:10px; flex-shrink:0;
+    background:linear-gradient(135deg, rgb(var(--accent-light-rgb)), rgb(var(--accent-rgb)));
+    display:flex; align-items:center; justify-content:center;
+    box-shadow:0 4px 14px rgb(var(--accent-rgb) / 0.4);
+  }
+  .brand-mark svg{width:19px; height:19px; color:#fff;}
+  .brand-sub{
+    font-family:'Heebo'; font-weight:500; font-size:0.78rem; color:var(--gold-light);
+    background:rgba(201,169,97,0.14); border:1px solid rgba(201,169,97,0.35);
+    padding:3px 10px; border-radius:100px; margin-inline-start:2px;
+  }
+  .topbar-spacer{flex:1;}
+  .icon-btn{
+    width:36px; height:36px; border-radius:10px; flex-shrink:0;
+    border:1px solid rgba(255,255,255,0.22); background:rgba(255,255,255,0.05);
+    color:var(--white); display:flex; align-items:center; justify-content:center;
+    transition:background .2s ease, border-color .2s ease, transform .2s ease;
+  }
+  .icon-btn:hover{background:rgba(255,255,255,0.14); border-color:rgba(255,255,255,0.45); transform:translateY(-1px);}
+  .icon-btn svg{width:16px; height:16px;}
+  html.theme-dark .icon-btn.theme{background:rgba(201,169,97,0.14); border-color:rgba(201,169,97,0.42); color:var(--gold-light);}
+  .back-btn{
+    display:inline-flex; align-items:center; gap:8px; white-space:nowrap;
+    padding:9px 18px; border-radius:100px; font-weight:700; font-size:0.88rem;
+    background:var(--white); color:var(--navy);
+    transition:transform .2s ease, box-shadow .2s ease;
+  }
+  .back-btn:hover{transform:translateY(-2px); box-shadow:0 10px 24px rgba(0,0,0,0.35);}
+  .back-btn svg{width:15px; height:15px;}
+  [dir="rtl"] .back-btn svg{transform:scaleX(-1);}
+  .user-chip{
+    display:flex; align-items:center; gap:9px; max-width:230px;
+    padding:5px 14px 5px 5px; border-radius:100px;
+    background:rgba(255,255,255,0.06); border:1px solid var(--line);
+  }
+  [dir="rtl"] .user-chip{padding:5px 5px 5px 14px;}
+  .user-avatar{
+    position:relative;
+    width:28px; height:28px; border-radius:50%; flex-shrink:0;
+    background:linear-gradient(135deg, var(--blue), var(--blue-2));
+    display:flex; align-items:center; justify-content:center;
+    color:#fff; font-family:'Rubik'; font-weight:800; font-size:0.8rem;
+  }
+  /* the small Google badge, mirroring the landing page's avatar */
+  .avatar-provider{
+    position:absolute; bottom:-3px; inset-inline-start:-3px;
+    width:14px; height:14px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    background:#fff; padding:2px;
+    box-shadow:0 1px 4px rgba(0,0,0,0.4); pointer-events:none;
+  }
+  .avatar-provider svg{width:100%; height:100%;}
+  .user-mail{font-size:0.8rem; color:rgba(255,255,255,0.75); overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+
+  /* ===== PAGE HEAD ===== */
+  .page-head{padding:44px 0 8px;}
+  .page-head h1{font-size:clamp(1.7rem,3.4vw,2.5rem); color:var(--white); line-height:1.2;}
+  .page-head p{margin-top:10px; color:rgba(255,255,255,0.6); font-size:1rem; font-weight:300;}
+
+  /* ===== CARDS / GRID ===== */
+  .grid{display:grid; gap:22px; padding:26px 0 60px;}
+  .row-main{grid-template-columns:1.45fr 1fr;}
+  .row-kpi{grid-template-columns:repeat(4,1fr);}
+  .row-split{grid-template-columns:1.45fr 1fr;}
+  .card{
+    background:linear-gradient(160deg, rgba(255,255,255,0.075), rgba(255,255,255,0.028));
+    border:1px solid var(--line);
+    border-radius:24px; padding:26px 24px;
+    backdrop-filter:blur(6px);
+    box-shadow:0 24px 60px rgba(3,10,30,0.3), inset 0 1px 0 rgba(255,255,255,0.08);
+  }
+  .card-head{display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:18px;}
+  .card-title{display:flex; align-items:center; gap:9px; color:var(--white); font-size:1.02rem; font-family:'Rubik'; font-weight:700;}
+  .card-title svg{width:17px; height:17px; color:var(--blue-light); flex-shrink:0;}
+  .card-note{font-size:0.76rem; color:rgba(255,255,255,0.45);}
+
+  /* ===== GOAL CARD ===== */
+  .goal-body{display:flex; align-items:center; gap:28px; flex-wrap:wrap;}
+  .ring-wrap{position:relative; width:172px; height:172px; flex-shrink:0;}
+  /* progress always runs clockwise — a mirrored ring reads as "going backwards" */
+  .ring{width:100%; height:100%; transform:rotate(-90deg);}
+  .ring-track{fill:none; stroke:rgba(255,255,255,0.1); stroke-width:11;}
+  .ring-fill{
+    fill:none; stroke:url(#ringGrad); stroke-width:11; stroke-linecap:round;
+    stroke-dasharray:439.8; stroke-dashoffset:439.8;
+    transition:stroke-dashoffset .9s cubic-bezier(.22,1,.36,1);
+  }
+  .ring-center{
+    position:absolute; inset:0; display:flex; flex-direction:column;
+    align-items:center; justify-content:center; gap:2px; text-align:center;
+  }
+  .ring-emoji{font-size:1.5rem; line-height:1;}
+  .ring-pct{font-family:'Rubik'; font-weight:900; font-size:1.9rem; color:var(--white); line-height:1.05;}
+  .ring-label{font-size:0.7rem; color:rgba(255,255,255,0.5);}
+  .goal-facts{flex:1; min-width:230px;}
+  .goal-name{font-family:'Rubik'; font-weight:800; font-size:1.5rem; color:var(--white); line-height:1.25; word-break:break-word;}
+  .goal-money{display:flex; align-items:baseline; gap:8px; margin-top:12px; flex-wrap:wrap;}
+  .goal-money .saved{font-family:'Rubik'; font-weight:900; font-size:2rem; color:var(--blue-light); text-shadow:0 0 26px rgb(var(--accent-light-rgb) / 0.35);}
+  .goal-money .of{font-size:0.95rem; color:rgba(255,255,255,0.55);}
+  .goal-remaining{margin-top:8px; font-size:0.9rem; color:rgba(255,255,255,0.62);}
+  .goal-remaining b{color:var(--white); font-family:'Rubik'; font-weight:700;}
+  .goal-bar{height:7px; border-radius:100px; background:rgba(255,255,255,0.1); margin-top:16px; overflow:hidden;}
+  .goal-bar span{
+    display:block; height:100%; border-radius:100px; width:0;
+    background:linear-gradient(90deg, rgb(var(--accent-light-rgb)), rgb(var(--accent-rgb)));
+    transition:width .9s cubic-bezier(.22,1,.36,1);
+  }
+  .goal-tags{display:flex; gap:8px; flex-wrap:wrap; margin-top:16px;}
+  .tag{
+    display:inline-flex; align-items:center; gap:6px;
+    font-size:0.76rem; font-weight:600; padding:5px 12px; border-radius:100px;
+    background:rgba(255,255,255,0.07); border:1px solid var(--line); color:rgba(255,255,255,0.75);
+  }
+  .tag .ico{width:13px; height:13px; flex-shrink:0;}
+  .ms-dot .ico{width:15px; height:15px;}
+  .tag.gold{background:rgba(201,169,97,0.16); border-color:rgba(201,169,97,0.4); color:var(--gold-light);}
+  .tag.good{background:rgba(61,220,151,0.14); border-color:rgba(61,220,151,0.35); color:var(--green);}
+  .tag.bad{background:rgba(255,122,122,0.14); border-color:rgba(255,122,122,0.35); color:var(--red);}
+
+  /* ===== DEPOSIT CARD ===== */
+  /* a bordered well, not a naked number — the borderless version read as a
+     rendering glitch: a stray caret with a currency sign floating beside it */
+  .dep-amount{
+    display:flex; align-items:center; justify-content:center; gap:8px;
+    margin:16px 0 4px; padding:14px 22px;
+    background:rgba(255,255,255,0.05);
+    border:1.5px solid var(--line); border-radius:18px;
+    transition:border-color .2s ease, background .2s ease, box-shadow .2s ease;
+  }
+  .dep-amount:focus-within{
+    border-color:var(--gold); background:rgba(255,255,255,0.08);
+    box-shadow:0 0 0 4px rgba(201,169,97,0.14);
+  }
+  .dep-amount .cur{
+    font-family:'Rubik'; font-size:1.5rem; font-weight:700;
+    color:rgba(255,255,255,0.45); line-height:1;
+  }
+  .dep-input{
+    width:auto; max-width:170px; background:transparent; border:none; outline:none;
+    font-family:'Rubik'; font-weight:900; font-size:2.3rem; color:var(--white);
+    text-align:center; padding:0; line-height:1.1; -moz-appearance:textfield;
+  }
+  .dep-input::placeholder{color:rgba(255,255,255,0.28);}
+  .dep-input::-webkit-outer-spin-button, .dep-input::-webkit-inner-spin-button{-webkit-appearance:none; margin:0;}
+  .dep-quick{display:flex; gap:8px; justify-content:center; flex-wrap:wrap; margin:12px 0 18px;}
+  .dep-quick button{
+    padding:7px 15px; border-radius:100px; font-size:0.83rem; font-weight:700;
+    background:rgba(255,255,255,0.07); border:1px solid var(--line); color:rgba(255,255,255,0.8);
+    transition:background .2s ease, border-color .2s ease, transform .15s ease;
+  }
+  .dep-quick button:hover{background:rgb(var(--accent-rgb) / 0.22); border-color:rgb(var(--accent-light-rgb) / 0.5); color:var(--white); transform:translateY(-1px);}
+  .btn-primary{
+    display:flex; align-items:center; justify-content:center; gap:9px; width:100%;
+    background:linear-gradient(100deg, var(--blue) 0%, var(--blue-2) 55%, #6B5FFF 130%);
+    color:var(--white); padding:14px 22px; border-radius:100px;
+    font-weight:800; font-size:0.95rem;
+    box-shadow:0 12px 30px rgb(var(--accent-rgb) / 0.4), inset 0 1px 0 rgba(255,255,255,0.25);
+    transition:transform .25s cubic-bezier(.22,1,.36,1), box-shadow .25s ease, opacity .2s ease;
+  }
+  .btn-primary:hover:not(:disabled){transform:translateY(-2px); box-shadow:0 20px 44px rgb(var(--accent-rgb) / 0.5), inset 0 1px 0 rgba(255,255,255,0.3);}
+  .btn-primary:disabled{opacity:.4; cursor:not-allowed;}
+  .btn-primary svg{width:16px; height:16px;}
+  .dep-hint{margin-top:12px; font-size:0.76rem; color:rgba(255,255,255,0.42); text-align:center; line-height:1.6;}
+  .dep-flash{
+    margin-top:12px; text-align:center; font-size:0.85rem; font-weight:700; color:var(--green);
+    opacity:0; transform:translateY(4px); transition:opacity .3s ease, transform .3s ease;
+  }
+  .dep-flash.show{opacity:1; transform:translateY(0);}
+
+  /* ===== KPI TILES ===== */
+  .kpi{
+    background:linear-gradient(160deg, rgba(255,255,255,0.07), rgba(255,255,255,0.025));
+    border:1px solid var(--line); border-radius:20px; padding:20px 20px 18px;
+    box-shadow:0 16px 40px rgba(3,10,30,0.25);
+    transition:transform .3s cubic-bezier(.22,1,.36,1), border-color .3s ease, box-shadow .3s ease;
+  }
+  .kpi:hover{transform:translateY(-4px); border-color:rgb(var(--accent-light-rgb) / 0.4); box-shadow:0 26px 54px rgba(3,10,30,0.4);}
+  .kpi-top{display:flex; align-items:center; gap:8px; margin-bottom:12px;}
+  .kpi-ico{
+    width:30px; height:30px; border-radius:9px; flex-shrink:0;
+    display:flex; align-items:center; justify-content:center;
+    background:rgb(var(--accent-rgb) / 0.2); color:var(--blue-light);
+  }
+  .kpi-ico svg{width:15px; height:15px;}
+  .kpi-ico.gold{background:rgba(201,169,97,0.2); color:var(--gold-light);}
+  .kpi-ico.green{background:rgba(61,220,151,0.18); color:var(--green);}
+  .kpi-lbl{font-size:0.79rem; color:rgba(255,255,255,0.6); font-weight:500; line-height:1.35;}
+  .kpi-val{font-family:'Rubik'; font-weight:900; font-size:1.5rem; color:var(--white); line-height:1.2; word-break:break-word;}
+  .kpi-val.accent{color:var(--blue-light);}
+  .kpi-val.gold{color:var(--gold-light);}
+  .kpi-val.green{color:var(--green);}
+  .kpi-val.warn{color:var(--red);}
+  .kpi-sub{margin-top:5px; font-size:0.76rem; color:rgba(255,255,255,0.45); line-height:1.5;}
+
+  /* ===== CHART ===== */
+  .chart-legend{display:flex; gap:18px; flex-wrap:wrap; margin-bottom:14px; font-size:0.78rem; color:rgba(255,255,255,0.62);}
+  .chart-legend span{display:flex; align-items:center; gap:7px;}
+  .chart-legend i{width:16px; height:3px; border-radius:2px; display:inline-block;}
+  #chart{width:100%; height:270px; display:block;}
+
+  /* ===== MILESTONES ===== */
+  .ms-list{display:flex; flex-direction:column; gap:2px;}
+  .ms{display:flex; align-items:center; gap:14px; padding:11px 4px; position:relative;}
+  .ms + .ms{border-top:1px solid rgba(255,255,255,0.07);}
+  .ms-dot{
+    width:34px; height:34px; border-radius:50%; flex-shrink:0;
+    display:flex; align-items:center; justify-content:center; font-size:0.95rem;
+    background:rgba(255,255,255,0.06); border:1.5px solid rgba(255,255,255,0.16);
+    transition:background .3s ease, border-color .3s ease;
+  }
+  .ms.done .ms-dot{background:rgb(var(--accent-rgb) / 0.3); border-color:rgb(var(--accent-light-rgb) / 0.7); box-shadow:0 0 14px rgb(var(--accent-rgb) / 0.45);}
+  .ms.final.done .ms-dot{background:rgba(201,169,97,0.3); border-color:rgba(228,205,148,0.8); box-shadow:0 0 16px rgba(201,169,97,0.5);}
+  .ms-txt{flex:1; min-width:0;}
+  .ms-txt b{display:block; color:var(--white); font-size:0.92rem; font-weight:600;}
+  .ms-txt small{display:block; font-size:0.76rem; color:rgba(255,255,255,0.45); margin-top:2px;}
+  .ms.done .ms-txt small{color:var(--blue-light);}
+  .ms-amt{font-family:'Rubik'; font-weight:700; font-size:0.88rem; color:rgba(255,255,255,0.7); white-space:nowrap;}
+
+  /* ===== STREAK =====
+     One horizontal bar. Stacked, it left a dead strip across the middle of the
+     card and stood twice as tall as it had any reason to. */
+  .streak-card{
+    display:flex; align-items:center; gap:18px; flex-wrap:wrap;
+    padding:18px 22px;
+  }
+  .streak-flame{
+    width:52px; height:52px; border-radius:16px; flex-shrink:0;
+    display:flex; align-items:center; justify-content:center;
+    background:rgba(255,255,255,0.06); border:1px solid var(--line);
+    color:rgba(255,255,255,0.35);
+    transition:background .3s ease, border-color .3s ease, color .3s ease, box-shadow .3s ease;
+  }
+  .streak-flame svg{width:25px; height:25px;}
+  /* the flame only lights once a streak actually exists — a lit icon at zero is a lie */
+  .streak-card.live .streak-flame{
+    background:linear-gradient(150deg, rgba(255,138,61,0.26), rgba(255,84,44,0.12));
+    border-color:rgba(255,138,61,0.5); color:#FF9B4D;
+    box-shadow:0 0 22px rgba(255,120,45,0.28);
+  }
+  .streak-txt{flex:0 0 auto;}
+  .streak-num{font-family:'Rubik'; font-weight:900; font-size:1.85rem; color:var(--white); line-height:1.1;}
+  .streak-num small{font-family:'Heebo'; font-weight:600; font-size:0.9rem; color:rgba(255,255,255,0.6);}
+  .streak-sub{font-size:0.84rem; color:rgba(255,255,255,0.55); margin-top:4px;}
+  .streak-card.live .streak-sub{color:#FFB77A;}
+  /* the strip absorbs the leftover width, which is what stops the bar from
+     collapsing around the text and leaving a hole beside it */
+  .streak-weeks{flex:1 1 240px; display:flex; gap:6px; min-width:0;}
+  .streak-weeks span{
+    flex:1; height:38px; border-radius:10px; min-width:0;
+    background:rgba(255,255,255,0.05); border:1px solid var(--line);
+    display:flex; align-items:center; justify-content:center;
+    font-size:0.66rem; font-weight:700; color:rgba(255,255,255,0.3);
+    white-space:nowrap; overflow:hidden;
+  }
+  .streak-weeks span.on{
+    background:linear-gradient(160deg, rgba(255,138,61,0.30), rgba(255,84,44,0.14));
+    border-color:rgba(255,138,61,0.45); color:#FFB77A;
+  }
+  .streak-weeks span.now{border-style:dashed; border-color:rgba(255,255,255,0.32);}
+  .streak-weeks span.on.now{border-style:solid;}
+  .streak-best{
+    flex:0 0 auto;
+    font-size:0.78rem; font-weight:600; color:rgba(255,255,255,0.55);
+    background:rgba(255,255,255,0.06); border:1px solid var(--line);
+    padding:7px 14px; border-radius:100px; white-space:nowrap;
+  }
+
+  @media (max-width:860px){
+    /* the strip drops to its own full-width line instead of being crushed */
+    .streak-weeks{flex:1 1 100%; order:4;}
+    .streak-best{margin-inline-start:auto;}
+  }
+  @media (max-width:560px){
+    .streak-card{gap:14px; padding:16px 18px;}
+    .streak-flame{width:46px; height:46px; border-radius:14px;}
+    .streak-flame svg{width:22px; height:22px;}
+    .streak-num{font-size:1.6rem;}
+    .streak-sub{font-size:0.8rem;}
+    .streak-weeks{gap:5px;}
+    .streak-weeks span{height:34px; font-size:0.6rem;}
+  }
+
+  /* ===== BACKUP ===== */
+  .backup-why{font-size:0.88rem; line-height:1.7; color:rgba(255,255,255,0.62); margin:0 0 20px;}
+  .backup-actions{display:flex; gap:12px; flex-wrap:wrap;}
+  .backup-btn{
+    display:inline-flex; align-items:center; gap:9px;
+    padding:13px 22px; border-radius:14px;
+    font-family:inherit; font-weight:700; font-size:0.9rem;
+    background:rgba(255,255,255,0.07); border:1px solid var(--line); color:var(--white);
+    transition:background .2s ease, border-color .2s ease, transform .2s ease;
+  }
+  .backup-btn:hover{background:rgba(255,255,255,0.12); border-color:rgba(201,169,97,0.4); transform:translateY(-2px);}
+  .backup-btn.primary{
+    background:linear-gradient(135deg, var(--gold-light) 0%, var(--gold) 55%, #B8964E 100%);
+    color:#241A05; border-color:transparent;
+    box-shadow:0 12px 28px rgba(201,169,97,0.26), inset 0 1px 0 rgba(255,255,255,0.45);
+  }
+  .backup-btn.primary:hover{filter:brightness(1.05); border-color:transparent;}
+  .backup-btn svg{width:16px; height:16px; flex-shrink:0;}
+  .backup-flash{
+    margin-top:14px; font-size:0.85rem; font-weight:600; min-height:1.2em;
+    opacity:0; transition:opacity .25s ease;
+  }
+  .backup-flash.show{opacity:1;}
+  .backup-flash.ok{color:var(--green);}
+  .backup-flash.err{color:var(--red);}
+
+  /* ===== BREAKDOWN ===== */
+  .bd-row{display:flex; align-items:baseline; justify-content:space-between; gap:14px; padding:11px 0; border-bottom:1px solid rgba(255,255,255,0.07); font-size:0.88rem;}
+  .bd-row:last-child{border-bottom:none;}
+  .bd-row .k{color:rgba(255,255,255,0.62);}
+  .bd-row .v{font-family:'Rubik'; font-weight:700; color:var(--white); white-space:nowrap;}
+  .bd-row .v.pos{color:var(--green);}
+  .bd-row .v.neg{color:var(--red);}
+  .bd-row.total{border-top:1px solid rgba(255,255,255,0.16); margin-top:6px; padding-top:14px;}
+  .bd-row.total .k{color:var(--white); font-weight:600;}
+  .bd-row.total .v{font-size:1.15rem; color:var(--blue-light);}
+  .formula{
+    display:block; margin-top:14px; padding:11px 14px; border-radius:12px;
+    background:rgba(0,0,0,0.24); font-size:0.79rem; color:rgba(255,255,255,0.6);
+    direction:ltr; text-align:left; unicode-bidi:isolate; line-height:1.7; word-break:break-word;
+  }
+
+  /* ===== HISTORY ===== */
+  .hist{display:flex; flex-direction:column; gap:2px; max-height:290px; overflow-y:auto;}
+  .hist-row{display:flex; align-items:center; gap:12px; padding:10px 2px;}
+  .hist-row + .hist-row{border-top:1px solid rgba(255,255,255,0.07);}
+  .hist-ico{
+    width:30px; height:30px; border-radius:9px; flex-shrink:0;
+    display:flex; align-items:center; justify-content:center;
+    background:rgba(61,220,151,0.16); color:var(--green); font-size:0.9rem; font-weight:800;
+  }
+  .hist-ico.neg{background:rgba(255,122,122,0.16); color:var(--red);}
+  .hist-main{flex:1; min-width:0;}
+  .hist-main b{display:block; font-family:'Rubik'; font-weight:700; font-size:0.92rem; color:var(--white);}
+  .hist-main small{display:block; font-size:0.75rem; color:rgba(255,255,255,0.45); margin-top:2px;}
+  .hist-del{
+    width:26px; height:26px; border-radius:8px; flex-shrink:0;
+    background:transparent; border:1px solid rgba(255,255,255,0.14); color:rgba(255,255,255,0.45);
+    display:flex; align-items:center; justify-content:center;
+    transition:background .2s ease, color .2s ease, border-color .2s ease;
+  }
+  .hist-del:hover{background:rgba(255,122,122,0.16); color:var(--red); border-color:rgba(255,122,122,0.4);}
+  .hist-del svg{width:12px; height:12px;}
+  .empty-inline{padding:26px 10px; text-align:center; color:rgba(255,255,255,0.42); font-size:0.87rem; line-height:1.7;}
+
+  /* ===== EMPTY / LOCKED STATE ===== */
+  /* ===== LOCK GATE — matches the signup screen: navy surface, gold action ===== */
+  /* everything on this page lives inside one wrapper div, so a flex body can't
+     reach in here — the gate claims the space between nav and footer directly */
+  .locked{
+    min-height:calc(100vh - 180px);
+    display:flex; align-items:center; justify-content:center; padding:60px 0;
+  }
+  .locked-card{
+    position:relative; overflow:hidden;
+    max-width:470px; width:100%; text-align:center;
+    background:
+      radial-gradient(380px 220px at 50% 0%, rgba(201,169,97,0.12), transparent 70%),
+      linear-gradient(160deg, #0B2350 0%, var(--navy) 60%, #061630 100%);
+    border:1px solid rgba(255,255,255,0.14);
+    border-radius:26px; padding:46px 36px 36px;
+    box-shadow:0 36px 84px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.10);
+  }
+  .locked-card::before{
+    content:""; position:absolute; inset:0 0 auto 0; height:1px;
+    background:linear-gradient(90deg, transparent, rgba(201,169,97,0.6), transparent);
+  }
+  .locked-ico{
+    width:66px; height:66px; margin:0 auto 22px; border-radius:20px;
+    display:flex; align-items:center; justify-content:center;
+    background:linear-gradient(150deg, rgba(201,169,97,0.20), rgba(201,169,97,0.06));
+    border:1px solid rgba(201,169,97,0.42); color:var(--gold-light);
+    box-shadow:0 0 0 8px rgba(201,169,97,0.05);
+  }
+  .locked-ico svg{width:30px; height:30px;}
+  .locked-card h2{color:var(--white); font-size:1.36rem; line-height:1.38; margin-bottom:12px;}
+  .locked-card p{color:rgba(255,255,255,0.66); font-size:0.93rem; line-height:1.7; margin-bottom:26px;}
+  .locked-cta{
+    display:inline-flex; align-items:center; justify-content:center; gap:9px;
+    background:linear-gradient(135deg, var(--gold-light) 0%, var(--gold) 55%, #B8964E 100%);
+    color:#241A05; padding:15px 34px; border-radius:14px;
+    font-weight:800; font-size:0.96rem;
+    box-shadow:0 14px 32px rgba(201,169,97,0.30), inset 0 1px 0 rgba(255,255,255,0.45);
+    transition:transform .2s ease, box-shadow .2s ease, filter .2s ease;
+  }
+  .locked-cta:hover{
+    transform:translateY(-2px); filter:brightness(1.05);
+    box-shadow:0 20px 44px rgba(201,169,97,0.42), inset 0 1px 0 rgba(255,255,255,0.55);
+  }
+  .locked-cta svg{width:15px; height:15px;}
+  [dir="rtl"] .locked-cta svg{transform:scaleX(-1);}
+  .locked-note{margin-top:16px; font-size:0.77rem; color:rgba(255,255,255,0.42);}
+  .locked-restore{
+    margin-top:24px; padding-top:20px; border-top:1px solid rgba(255,255,255,0.09);
+    font-size:0.82rem; color:rgba(255,255,255,0.5);
+    display:flex; align-items:center; justify-content:center; gap:8px; flex-wrap:wrap;
+  }
+  .locked-restore button{
+    background:none; border:none; padding:0;
+    font-family:inherit; font-size:0.82rem; font-weight:700;
+    color:var(--gold-light); text-decoration:underline; text-underline-offset:3px;
+  }
+  .locked-restore button:hover{color:var(--white);}
+  .locked-card .backup-flash{margin-top:12px; text-align:center;}
+
+  footer{
+    border-top:1px solid var(--line); padding:26px 0 34px;
+    color:rgba(255,255,255,0.4); font-size:0.8rem; text-align:center;
+  }
+  footer a{color:var(--blue-light);}
+
+  /* ===== ACCESSIBILITY (mirrors the landing page's panel) ===== */
+  html.a11y-contrast{filter:contrast(1.35) saturate(1.15);}
+  html.a11y-grayscale{filter:grayscale(100%);}
+  html.a11y-contrast.a11y-grayscale{filter:grayscale(100%) contrast(1.35);}
+  html.a11y-underline a{text-decoration:underline !important;}
+  html.a11y-readable-font body, html.a11y-readable-font input, html.a11y-readable-font button{
+    font-family:Arial, Helvetica, sans-serif !important; letter-spacing:0.01em;
+  }
+  html.a11y-readable-font p{line-height:1.9 !important;}
+  html.a11y-stop-motion *{animation:none !important; transition:none !important;}
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width:1080px){
+    .row-main, .row-split{grid-template-columns:1fr;}
+    .row-kpi{grid-template-columns:repeat(2,1fr);}
+  }
+  @media (max-width:760px){
+    .container{padding:0 18px;}
+    .brand-sub{display:none;}
+    .user-mail{display:none;}
+    .user-chip{padding:5px !important;}
+    .back-btn span{display:none;}
+    .back-btn{padding:9px 12px;}
+    .page-head{padding:30px 0 4px;}
+    .card{padding:22px 18px;}
+    .goal-body{gap:20px; justify-content:center; text-align:center;}
+    .goal-facts{text-align:start;}
+    #chart{height:230px;}
+  }
+  @media (max-width:520px){
+    .row-kpi{grid-template-columns:1fr;}
+    .ring-wrap{width:148px; height:148px;}
+  }
+</style>
+</head>
+<body>
+
+<!-- one wrapper, so the single-file build can scope every query to this subtree -->
+<div id="dashboardPage">
+
+<header class="topbar">
+  <div class="container topbar-inner">
+    <a href="index.html" class="brand">
+      <span class="brand-mark">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17c4 0 5-9 8-9s4 5 6 5 3-3 4-4"/></svg>
+      </span>
+      SmartSaver AI
+      <span class="brand-sub" data-i18n="dash.title">התחברות</span>
+    </a>
+    <span class="topbar-spacer"></span>
+
+    <div class="user-chip" id="userChip" hidden>
+      <span class="user-avatar" id="userAvatar">?</span>
+      <span class="user-mail" id="userMail"></span>
+    </div>
+
+    <button class="icon-btn theme" id="themeBtn" type="button" aria-label="theme">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M9 18h6"/><path d="M10 21.5h4"/>
+        <path d="M12 2.5a6.5 6.5 0 0 0-3.8 11.8c.7.5 1.3 1.4 1.3 2.4v.3h5v-.3c0-1 .6-1.9 1.3-2.4A6.5 6.5 0 0 0 12 2.5z"/>
+      </svg>
+    </button>
+
+    <a href="index.html" class="back-btn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg>
+      <span data-i18n="dash.back">חזרה לאתר</span>
+    </a>
+  </div>
+</header>
+
+<!-- ===== NOT SIGNED IN ===== -->
+<section class="container locked" id="lockedView" hidden>
+  <div class="locked-card">
+    <div class="locked-ico">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="10.5" width="17" height="11" rx="2.5"/><path d="M7.5 10.5V7a4.5 4.5 0 0 1 9 0v3.5"/><circle cx="12" cy="16" r="1.3"/></svg>
+    </div>
+    <h2 data-i18n="dash.locked.title">צריך להירשם כדי להיכנס</h2>
+    <p data-i18n="dash.locked.desc">הרשמה עם אימייל בדף הבית שומרת את היעד וההתקדמות שלכם על המכשיר הזה — זה לוקח כמה שניות.</p>
+    <a href="index.html#cta" class="locked-cta">
+      <span data-i18n="dash.locked.cta">להרשמה</span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </a>
+    <div class="locked-note" data-i18n="dash.locked.note">חינם · בלי כרטיס אשראי · כמה שניות</div>
+    <!-- a fresh device is exactly when someone needs to restore, and this screen is
+         all they can see here — the option has to live on it too -->
+    <div class="locked-restore">
+      <span data-i18n="dash.locked.haveBackup">יש לכם קובץ גיבוי?</span>
+      <button type="button" id="lockedRestoreBtn" data-i18n="dash.backup.import">שחזור מקובץ</button>
+    </div>
+    <div class="backup-flash" id="lockedFlash"></div>
+  </div>
+</section>
+
+<!-- ===== DASHBOARD ===== -->
+<main id="dashView" hidden>
+  <div class="container page-head">
+    <h1 id="greeting">—</h1>
+    <p data-i18n="dash.sub">כל מה שהיעד שלכם עושה, במקום אחד — לפי המספרים האמיתיים שהזנתם.</p>
+  </div>
+
+  <div class="container grid row-main">
+    <!-- goal -->
+    <section class="card">
+      <div class="card-head">
+        <div class="card-title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1"/></svg>
+          <span data-i18n="dash.goal.title">היעד שלכם</span>
+        </div>
+        <a href="index.html#simulator" class="card-note" style="text-decoration:underline;" data-i18n="dash.goal.edit">עריכה בסימולטור</a>
+      </div>
+      <div class="goal-body">
+        <div class="ring-wrap">
+          <svg class="ring" viewBox="0 0 160 160">
+            <defs>
+              <linearGradient id="ringGrad" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="rgb(var(--accent-light-rgb))"/>
+                <stop offset="100%" stop-color="rgb(var(--accent-rgb))"/>
+              </linearGradient>
+            </defs>
+            <circle class="ring-track" cx="80" cy="80" r="70"/>
+            <circle class="ring-fill" id="ringFill" cx="80" cy="80" r="70"/>
+          </svg>
+          <div class="ring-center">
+            <span class="ring-emoji" id="goalEmoji">🎯</span>
+            <span class="ring-pct" id="goalPct">0%</span>
+            <span class="ring-label" data-i18n="dash.goal.done">הושלם</span>
+          </div>
+        </div>
+        <div class="goal-facts">
+          <div class="goal-name" id="dashGoalName">—</div>
+          <div class="goal-money">
+            <span class="saved" id="goalSaved">—</span>
+            <span class="of" id="goalOf">—</span>
+          </div>
+          <div class="goal-remaining" id="goalRemaining">—</div>
+          <div class="goal-bar"><span id="goalBar"></span></div>
+          <div class="goal-tags" id="goalTags"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- deposit -->
+    <section class="card">
+      <div class="card-head">
+        <div class="card-title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+          <span data-i18n="dash.dep.title">הפקדה חדשה</span>
+        </div>
+      </div>
+      <div class="dep-amount">
+        <span class="cur" id="depCur">₪</span>
+        <input type="number" class="dep-input" id="depInput" min="0" step="1" placeholder="0" inputmode="decimal">
+      </div>
+      <div class="dep-quick" id="depQuick"></div>
+      <button class="btn-primary" id="depBtn" type="button" disabled>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+        <span data-i18n="dash.dep.cta">הוספה לחיסכון</span>
+      </button>
+      <div class="dep-flash" id="depFlash"></div>
+      <p class="dep-hint" data-i18n="dash.dep.hint">הסכום נוסף ל"כמה כבר חסכתם" ומתעדכן מיד בכל התחזיות ובסימולטור.</p>
+    </section>
+  </div>
+
+  <!-- streak — "container grid" and not a plain container: .grid zeroes the
+       horizontal padding, and without it this row sits 28px narrower than every
+       other row on the page -->
+  <div class="container grid" style="padding-top:0;">
+    <section class="card streak-card" id="streakCard">
+      <span class="streak-flame" id="streakFlame">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5c.6 3.2 2.4 4.3 3.9 6A7.6 7.6 0 0 1 18 13.6a6 6 0 0 1-12 0c0-1.9.8-3.4 1.8-4.6.5.8 1.2 1.4 2 1.7.3-3.5 1.4-6.4 2.2-8.2z"/><path d="M12 20a2.8 2.8 0 0 1-2.6-3.4c.2-1 .9-1.7 1.5-2.5.4.5.8.9 1.3 1.1.3-1.2.9-2.1 1.4-2.8.6.9 1.4 2.1 1.4 3.8A2.9 2.9 0 0 1 12 20z"/></svg>
+      </span>
+      <div class="streak-txt">
+        <div class="streak-num"><span id="streakNum">0</span> <small data-i18n="dash.streak.unit">שבועות ברצף</small></div>
+        <div class="streak-sub" id="streakSub"></div>
+      </div>
+      <div class="streak-weeks" id="streakWeeks"></div>
+      <div class="streak-best" id="streakBest"></div>
+    </section>
+  </div>
+
+  <!-- KPIs -->
+  <div class="container grid row-kpi" style="padding-top:0;">
+    <div class="kpi">
+      <div class="kpi-top">
+        <span class="kpi-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M14 7h7v7"/></svg></span>
+        <span class="kpi-lbl" data-i18n="dash.kpi.weekly">חיסכון נטו לשבוע</span>
+      </div>
+      <div class="kpi-val" id="kpiWeekly">—</div>
+      <div class="kpi-sub" id="kpiWeeklySub">—</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-top">
+        <span class="kpi-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M8 3v4M16 3v4M3 11h18"/></svg></span>
+        <span class="kpi-lbl" data-i18n="dash.kpi.base">בקצב הנוכחי</span>
+      </div>
+      <div class="kpi-val" id="kpiBase">—</div>
+      <div class="kpi-sub" id="kpiBaseSub">—</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-top">
+        <span class="kpi-ico gold"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L4.5 13H11l-1 9 8.5-11H12l1-9z"/></svg></span>
+        <span class="kpi-lbl" data-i18n="dash.kpi.improved">עם הקיצוץ שסימנתם</span>
+      </div>
+      <div class="kpi-val gold" id="kpiImproved">—</div>
+      <div class="kpi-sub" id="kpiImprovedSub">—</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-top">
+        <span class="kpi-ico green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg></span>
+        <span class="kpi-lbl" data-i18n="dash.kpi.saveddays">ימים שחסכתם</span>
+      </div>
+      <div class="kpi-val green" id="kpiDays">—</div>
+      <div class="kpi-sub" id="kpiDaysSub">—</div>
+    </div>
+  </div>
+
+  <div class="container grid row-split" style="padding-top:0;">
+    <!-- chart -->
+    <section class="card">
+      <div class="card-head">
+        <div class="card-title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V4M4 20h16"/><path d="M7 16l4-5 3 3 5-7"/></svg>
+          <span data-i18n="dash.chart.title">תחזית החיסכון</span>
+        </div>
+      </div>
+      <div class="chart-legend">
+        <span><i style="background:rgba(255,255,255,0.42);"></i> <span data-i18n="dash.chart.base">קצב נוכחי</span></span>
+        <span><i style="background:#7FB0FF;"></i> <span data-i18n="dash.chart.improved">עם הקיצוץ</span></span>
+        <span><i style="background:#E4CD94;"></i> <span data-i18n="dash.chart.goal">עלות היעד</span></span>
+      </div>
+      <canvas id="chart" width="900" height="270"></canvas>
+    </section>
+
+    <!-- milestones -->
+    <section class="card">
+      <div class="card-head">
+        <div class="card-title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M5 21V4M5 4h11l-2 3.5L16 11H5"/></svg>
+          <span data-i18n="dash.ms.title">אבני דרך</span>
+        </div>
+      </div>
+      <div class="ms-list" id="msList"></div>
+    </section>
+  </div>
+
+  <div class="container grid row-split" style="padding-top:0;">
+    <!-- breakdown -->
+    <section class="card">
+      <div class="card-head">
+        <div class="card-title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="3"/><path d="M8 8h8M8 12h8M8 16h4"/></svg>
+          <span data-i18n="dash.bd.title">איך המספר מחושב</span>
+        </div>
+      </div>
+      <div id="bdRows"></div>
+      <span class="formula" id="bdFormula"></span>
+    </section>
+
+    <!-- history -->
+    <section class="card">
+      <div class="card-head">
+        <div class="card-title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+          <span data-i18n="dash.hist.title">היסטוריית הפקדות</span>
+        </div>
+        <span class="card-note" id="histTotal"></span>
+      </div>
+      <div class="hist" id="histList"></div>
+    </section>
+  </div>
+
+  <!-- backup -->
+  <div class="container" style="padding-top:0;">
+    <section class="card backup-card">
+      <div class="card-head">
+        <div class="card-title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5M12 15V3"/></svg>
+          <span data-i18n="dash.backup.title">גיבוי ושחזור</span>
+        </div>
+      </div>
+      <p class="backup-why" data-i18n="dash.backup.why">היעד וההפקדות שמורים רק בדפדפן הזה. ניקוי היסטוריית הגלישה ימחק אותם. שמרו קובץ גיבוי — הוא גם מעביר את הכול לטלפון או למחשב אחר.</p>
+      <div class="backup-actions">
+        <button type="button" class="backup-btn primary" id="backupExport">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5M12 15V3"/></svg>
+          <span data-i18n="dash.backup.export">הורדת גיבוי</span>
+        </button>
+        <button type="button" class="backup-btn" id="backupImportBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 8l5-5 5 5M12 3v12"/></svg>
+          <span data-i18n="dash.backup.import">שחזור מקובץ</span>
+        </button>
+      </div>
+      <div class="backup-flash" id="backupFlash"></div>
+    </section>
+  </div>
+</main>
+
+<footer>
+  <div class="container">
+    © 2026 SmartSaver AI — <span data-i18n="dash.footer">כל הנתונים נשמרים על המכשיר הזה בלבד</span> · <a href="index.html" data-i18n="dash.back">חזרה לאתר</a>
+  </div>
+</footer>
+
+<!-- shared by the backup card and the lock screen; lives outside both so neither
+     being hidden can take the picker away -->
+<input type="file" id="backupFile" accept="application/json,.json" hidden>
+
+</div><!-- /#dashboardPage -->
+
+<script>
+/* =========================================================================
+   SmartSaver AI — Dashboard
+   Reads the very same localStorage record the landing page writes, so the two
+   pages are always looking at one truth. Nothing here leaves the device.
+   ========================================================================= */
+
+/* ---------- i18n (he / en / ar; every other language falls back to English) ---------- */
+const T = {
+  he: {
+    "dash.title":"התחברות",
+    "dash.back":"חזרה לאתר",
+    "dash.sub":"כל מה שהיעד שלכם עושה, במקום אחד — לפי המספרים האמיתיים שהזנתם.",
+    "dash.hello":"שלום, {name} 👋",
+    "dash.goal.title":"היעד שלכם",
+    "dash.goal.edit":"עריכה בסימולטור",
+    "dash.goal.done":"הושלם",
+    "dash.goal.of":"מתוך {total}",
+    "dash.goal.remaining":"נשארו לחסוך <b>{amount}</b>",
+    "dash.goal.reached":"היעד הושלם! אפשר לקנות 🎉",
+    "dash.dep.title":"הפקדה חדשה",
+    "dash.dep.cta":"הוספה לחיסכון",
+    "dash.dep.hint":"הסכום נוסף ל\"כמה כבר חסכתם\" ומתעדכן מיד בכל התחזיות ובסימולטור.",
+    "dash.dep.done":"נוספו {amount} לחיסכון ✓",
+    "dash.kpi.weekly":"חיסכון נטו לשבוע",
+    "dash.kpi.weekly.sub":"{allowance} דמי כיס + {extra} נוספות − {expenses} הוצאות",
+    "dash.kpi.weekly.warn":"ההוצאות גבוהות מההכנסות — כרגע לא נצבר חיסכון",
+    "dash.kpi.base":"בקצב הנוכחי",
+    "dash.kpi.improved":"עם הקיצוץ שסימנתם",
+    "dash.kpi.saveddays":"ימים שחסכתם",
+    "dash.kpi.days":"עוד {n} ימים",
+    "dash.kpi.never":"לא בקצב הזה",
+    "dash.kpi.nocut":"עדיין לא סימנתם קיצוץ",
+    "dash.kpi.cutof":"{amount} פחות הוצאות בשבוע",
+    "dash.kpi.reached":"כבר שם 🎉",
+    "dash.kpi.daysoff":"מוקדם יותר מהקצב הרגיל",
+    "dash.chart.title":"תחזית החיסכון",
+    "dash.chart.base":"קצב נוכחי",
+    "dash.chart.improved":"עם הקיצוץ",
+    "dash.chart.goal":"עלות היעד",
+    "dash.chart.today":"היום",
+    "dash.ms.title":"אבני דרך",
+    "dash.ms.reached":"הושג",
+    "dash.bd.title":"איך המספר מחושב",
+    "dash.bd.allowance":"דמי כיס שבועיים",
+    "dash.bd.extra":"הכנסה נוספת (חודשי ÷ {n})",
+    "dash.bd.expenses":"הוצאות שבועיות",
+    "dash.bd.cut":"קיצוץ שסימנתם",
+    "dash.bd.total":"סה\"כ נצבר בשבוע",
+    "dash.hist.title":"היסטוריית הפקדות",
+    "dash.hist.empty":"עוד לא רשמתם הפקדה.<br>כל סכום שתוסיפו יופיע כאן.",
+    "dash.hist.total":"סה\"כ {amount}",
+    "dash.hist.deposit":"הפקדה",
+    "dash.hist.undo":"ביטול הפקדה",
+    "dash.locked.title":"צריך להירשם כדי להיכנס",
+    "dash.locked.desc":"הרשמה עם אימייל בדף הבית שומרת את היעד וההתקדמות שלכם על המכשיר הזה — זה לוקח כמה שניות.",
+    "dash.locked.cta":"להרשמה",
+    "dash.locked.note":"חינם · בלי כרטיס אשראי · כמה שניות",
+    "dash.streak.unit":"שבועות ברצף",
+    "dash.streak.none":"הפקדה אחת השבוע מתחילה רצף.",
+    "dash.streak.safe":"השבוע כבר סומן. יפה!",
+    "dash.streak.risk":"עוד לא הפקדתם השבוע — הרצף בסכנה.",
+    "dash.streak.best":"השיא שלכם: {n}",
+    "dash.streak.wLabel":"השבוע",
+    "dash.locked.haveBackup":"יש לכם קובץ גיבוי?",
+    "dash.backup.title":"גיבוי ושחזור",
+    "dash.backup.why":"היעד וההפקדות שמורים רק בדפדפן הזה. ניקוי היסטוריית הגלישה ימחק אותם. שמרו קובץ גיבוי — הוא גם מעביר את הכול לטלפון או למחשב אחר.",
+    "dash.backup.export":"הורדת גיבוי",
+    "dash.backup.import":"שחזור מקובץ",
+    "dash.backup.okExport":"הגיבוי ירד. {n} פריטים נשמרו בקובץ.",
+    "dash.backup.okImport":"שוחזרו {n} פריטים. טוען מחדש…",
+    "dash.backup.confirm":"השחזור יחליף את היעד וההפקדות שקיימים כרגע בדפדפן הזה. להמשיך?",
+    "dash.backup.errParse":"הקובץ אינו גיבוי תקין של SmartSaver.",
+    "dash.backup.errNewer":"הגיבוי נוצר בגרסה חדשה יותר של האתר.",
+    "dash.backup.errRead":"לא הצלחנו לקרוא את הקובץ.",
+    "dash.backup.errEmpty":"אין עוד נתונים לגבות.",
+    "dash.footer":"כל הנתונים נשמרים על המכשיר הזה בלבד",
+    "dash.footer.synced":"הנתונים נשמרים על המכשיר הזה, והפעילות נרשמת בגיליון"
+  },
+};
+
+
+const CURRENCY_SYMBOL = '\u20aa';
+
+const MONTH_WEEKS = 4.345;
+const QUICK_STEPS = [10, 20, 50, 100];
+const MILESTONES = [25, 50, 75, 100];
+
+/* Google Sheets: the landing page owns the full logger (with retry queue) in the
+   single-file build. Standalone, this page needs a minimal one of its own. */
+const SheetLog = window.SSLog || (function(){
+  const cfg = window.SS_SHEETS || {};
+  const ok = typeof cfg.url === 'string' && cfg.url.indexOf('http') === 0;
+  return {
+    configured: () => ok,
+    send(event, extra){
+      if(!ok) return;
+      fetch(cfg.url, {
+        method: 'POST', mode: 'no-cors',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify(Object.assign({
+          secret: cfg.secret || '',
+          ts: new Date().toISOString(),
+          event: event,
+          device: window.matchMedia('(max-width: 760px)').matches ? 'mobile' : 'desktop'
+        }, extra || {}))
+      }).catch(() => {});
+    }
+  };
+})();
+
+/* Inline icons for strings built in JS. Emoji rendered differently on every OS
+   and clashed with the SVG set used everywhere else on the page. */
+const ICON = (function(){
+  const w = (d, extra) => '<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" ' +
+    'stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + d + '</svg>';
+  return {
+    trophy:   w('<path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0z"/><path d="M17 5h2.5a2.5 2.5 0 0 1 0 5H17M7 5H4.5a2.5 2.5 0 0 0 0 5H7"/>'),
+    calendar: w('<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 10h18"/>'),
+    scissors: w('<circle cx="6" cy="6" r="2.6"/><circle cx="6" cy="18" r="2.6"/><path d="M20 4L8.6 16.4M8.6 7.6L20 20"/>'),
+    check:    w('<path d="M20 6L9 17l-5-5"/>')
+  };
+})();
+
+/* Hebrew only. The multilingual build is preserved in languages-backup/. */
+const uiLang = 'he';
+
+function t(key, vars){
+  let s = T.he[key] !== undefined ? T.he[key] : key;
+  if(vars) Object.keys(vars).forEach(k => { s = s.split('{' + k + '}').join(vars[k]); });
+  return s;
+}
+
+/* look inside the dashboard's own subtree first — in the single-file build the landing
+   page shares this DOM, so an unscoped getElementById could reach the wrong element */
+const dashRoot = document.getElementById('dashboardPage');
+const $ = (id) => (dashRoot && dashRoot.querySelector('#' + id)) || document.getElementById(id);
+const cur = () => CURRENCY_SYMBOL;
+
+function money(n){
+  if(!isFinite(n)) return '—';
+  return cur() + Math.round(n).toLocaleString(undefined, { maximumFractionDigits: 0 });
+}
+function num(n){
+  if(!isFinite(n)) return '—';
+  return Math.round(n).toLocaleString(undefined, { maximumFractionDigits: 0 });
+}
+function pctOf(a, b){
+  if(!isFinite(a) || !isFinite(b) || b <= 0) return 0;
+  return Math.min(Math.max((a / b) * 100, 0), 100);
+}
+function addDays(date, days){
+  const d = new Date(date);
+  d.setDate(d.getDate() + Math.round(days));
+  return d;
+}
+function fmtDate(d){
+  try {
+    return new Intl.DateTimeFormat('he-IL', {
+      day: 'numeric', month: 'long',
+      year: d.getFullYear() !== new Date().getFullYear() ? 'numeric' : undefined
+    }).format(d);
+  } catch(e){ return d.toLocaleDateString(); }
+}
+function fmtDateShort(d){
+  try { return new Intl.DateTimeFormat('he-IL', { day:'numeric', month:'short' }).format(d); }
+  catch(e){ return d.toLocaleDateString(); }
+}
+
+/* ---------- deposit streak ----------
+   Allowance arrives weekly, so the unit that means something is "weeks in a row
+   with at least one deposit", not days. */
+const WEEK_MS = 7 * 24 * 60 * 60 * 1000;
+const STREAK_WEEKS_SHOWN = 8;
+
+// Weeks start Sunday. Anchoring at noon before rounding keeps DST shifts from
+// pushing a timestamp into the neighbouring week.
+function weekNo(ts){
+  const d = new Date(ts);
+  d.setHours(12, 0, 0, 0);
+  d.setDate(d.getDate() - d.getDay());
+  return Math.round(d.getTime() / WEEK_MS);
+}
+
+function streakInfo(deposits){
+  const weeks = new Set((Array.isArray(deposits) ? deposits : []).map(d => weekNo(d.ts)));
+  const now = weekNo(Date.now());
+  const thisWeekDone = weeks.has(now);
+
+  // the current week doesn't break a streak until it ends — there is still time
+  let current = 0;
+  let w = thisWeekDone ? now : now - 1;
+  while(weeks.has(w)){ current++; w--; }
+
+  const sorted = [...weeks].sort((a, b) => a - b);
+  let best = 0, run = 0;
+  sorted.forEach((wk, i) => {
+    run = (i > 0 && wk === sorted[i - 1] + 1) ? run + 1 : 1;
+    if(run > best) best = run;
+  });
+
+  const recent = [];
+  for(let i = STREAK_WEEKS_SHOWN - 1; i >= 0; i--) recent.push(weeks.has(now - i));
+
+  return { current, best: Math.max(best, current), thisWeekDone, recent };
+}
+
+/* ---------- goal → emoji, mirroring the landing page ---------- */
+const GOAL_EMOJI = [
+  [['bike','bicycle','אופניים','bicicleta','vélo','fahrrad','велосипед','自転車','자전거','单车','xe đạp','دراجة'], '🚲'],
+  [['console','ps5','ps4','playstation','xbox','switch','nintendo','קונסולה','משחק','جهاز ألعاب'], '🎮'],
+  [['phone','iphone','samsung','mobile','smartphone','טלפון','פלאפון','celular','téléphone','handy','телефон','手机','هاتف'], '📱'],
+  [['laptop','computer','pc','notebook','מחשב','ordinateur','компьютер','حاسوب'], '💻'],
+  [['headphone','earphone','airpods','אוזניות','écouteurs','kopfhörer','наушники','سماعات'], '🎧'],
+  [['trip','vacation','travel','holiday','journey','טיול','חופש','נסיעה','viaje','voyage','reise','путешествие','رحلة'], '✈️'],
+  [['watch','שעון','reloj','montre','uhr','часы','ساعة'], '⌚'],
+  [['camera','מצלמה','cámara','kamera','камера','كاميرا'], '📷'],
+  [['guitar','גיטרה','guitarra','gitarre','гитара','جيتار'], '🎸'],
+  [['skateboard','סקייטבורד','קורקינט'], '🛹'],
+  [['drone','רחפן','дрон','طائرة'], '🛸'],
+  [['shoe','sneaker','נעל','נעליים','zapatillas','кроссовки','حذاء'], '👟'],
+  [['car','רכב','מכונית','coche','voiture','auto','машина','سيارة'], '🚗'],
+  [['tablet','ipad','טאבלט'], '📱'],
+  [['piano','פסנתר','пианино','بيانو'], '🎹']
+];
+function goalEmoji(name){
+  const n = (name || '').toLowerCase();
+  if(!n.trim()) return '🎯';
+  for(const [words, emoji] of GOAL_EMOJI){
+    if(words.some(w => n.includes(w))) return emoji;
+  }
+  return '🎯';
+}
+
+/* ---------- shared preferences, restored exactly as the landing page left them ---------- */
+/* in the single-file build the landing page owns <html> and the title — touching them
+   from here would relabel its whole UI, so only the standalone page may. */
+const EMBEDDED = !!window.__ssSingleFile;
+
+function restorePrefs(){
+  if(dashRoot) dashRoot.setAttribute('dir', 'rtl');
+  if(!EMBEDDED){
+    document.documentElement.lang = 'he';
+    document.documentElement.dir = 'rtl';
+  }
+
+  try {
+    const accent = localStorage.getItem('smartsaver_accent_rgb');
+    const light = localStorage.getItem('smartsaver_accent_light_rgb');
+    if(accent) document.documentElement.style.setProperty('--accent-rgb', accent);
+    if(light) document.documentElement.style.setProperty('--accent-light-rgb', light);
+
+    if(localStorage.getItem('smartsaver_theme') === 'dark') document.documentElement.classList.add('theme-dark');
+
+    const pct = parseInt(localStorage.getItem('smartsaver_a11y_textpct'), 10);
+    if(isFinite(pct)) document.documentElement.style.fontSize = pct + '%';
+    ['contrast','grayscale','underline','readable-font','stop-motion'].forEach(name => {
+      if(localStorage.getItem('smartsaver_a11y_' + name) === '1') document.documentElement.classList.add('a11y-' + name);
+    });
+  } catch(e){}
+
+  // scoped: an unscoped query would relabel the landing page's own [data-i18n] nodes
+  // with raw key names, since this file only carries the dash.* dictionary
+  (dashRoot || document).querySelectorAll('[data-i18n]').forEach(el => {
+    el.innerHTML = t(el.getAttribute('data-i18n'));
+  });
+
+  // with a sheet connected the data no longer stays only on the device
+  if(SheetLog.configured()){
+    (dashRoot || document).querySelectorAll('[data-i18n="dash.footer"]').forEach(el => {
+      el.innerHTML = t('dash.footer.synced');
+    });
+  }
+
+  if(!EMBEDDED) document.title = 'SmartSaver AI — ' + t('dash.title');
+}
+
+/* ---------- the user record ---------- */
+function userKey(email){ return 'smartsaver_user:' + email.toLowerCase(); }
+
+/* Put a Google badge on the user chip's avatar when this session signed in with
+   Google. The landing page writes 'smartsaver_auth_provider' at sign-in; here we
+   only read it, so the mark matches the one shown on the landing page. */
+function paintProviderBadge(){
+  const av = $('userAvatar');
+  if(!av) return;
+  const old = av.querySelector('.avatar-provider');
+  if(old) old.remove();
+  let provider = null;
+  try { provider = localStorage.getItem('smartsaver_auth_provider'); } catch(e){}
+  if(provider !== 'google') return;
+  const badge = document.createElement('span');
+  badge.className = 'avatar-provider';
+  badge.title = 'מחובר עם Google';
+  badge.innerHTML = '<svg viewBox="0 0 48 48" aria-hidden="true"><path fill="#4285F4" d="M45.1 24.5c0-1.6-.1-2.7-.4-3.9H24v7.1h12.1c-.2 1.8-1.6 4.6-4.5 6.4l6.9 5.3c4.1-3.8 6.6-9.4 6.6-15z"/><path fill="#34A853" d="M24 46c5.9 0 10.9-2 14.5-5.3l-6.9-5.3c-1.8 1.3-4.3 2.2-7.6 2.2-5.8 0-10.7-3.8-12.5-9.1l-7.1 5.5C8 41 15.4 46 24 46z"/><path fill="#FBBC05" d="M11.5 28.5c-.5-1.4-.7-2.9-.7-4.5s.3-3.1.7-4.5l-7.1-5.5C2.9 17 2 20.4 2 24s.9 7 2.4 10z"/><path fill="#EA4335" d="M24 9.9c4.1 0 6.9 1.8 8.5 3.3l6.2-6C34.9 3.8 29.9 2 24 2 15.4 2 8 7 4.4 14.5l7.1 5.5C13.3 14.7 18.2 9.9 24 9.9z"/></svg>';
+  av.appendChild(badge);
+}
+
+let email = null, record = {};
+
+function loadRecord(){
+  try { email = localStorage.getItem('smartsaver_current_user'); } catch(e){ email = null; }
+  if(!email) return false;
+  try { record = JSON.parse(localStorage.getItem(userKey(email))) || {}; } catch(e){ record = {}; }
+  return true;
+}
+function saveRecord(){
+  if(!email) return;
+  record.savedAt = Date.now();
+  try { localStorage.setItem(userKey(email), JSON.stringify(record)); } catch(e){}
+  // mirrored to Supabase a moment later; the screen never waits for the network
+  if(window.SSCloud) SSCloud.syncUpSoon(email, record);
+}
+
+/* Pulls the account's record from Supabase and repaints if the other device
+   moved something. Safe to call when Supabase is not configured — it resolves
+   to false and nothing happens. */
+function syncFromCloud(){
+  if(!window.SSCloud || !SSCloud.signedIn() || !email) return;
+  SSCloud.syncDown(email).then(changed => {
+    if(!changed) return;
+    loadRecord();
+    // in the single-file build this page shares the DOM with the landing page and
+    // may be closed right now — drawing the chart into a 0-width canvas breaks it
+    const view = $('dashView');
+    if(view && !view.hidden && view.offsetParent !== null) render();
+  });
+}
+
+/* The lock screen on a device that is signed in but has never pulled: the
+   account does have a goal, this browser just does not know it yet. Runs at
+   most once, so a genuinely empty account still sees the lock screen and the
+   restore-from-backup button that lives there. */
+let cloudRescued = false;
+function cloudRescue(){
+  if(cloudRescued || !window.SSCloud || !SSCloud.signedIn()) return;
+  cloudRescued = true;
+
+  let mail = email;
+  if(!mail){
+    const u = SSCloud.user();
+    if(!u || !u.email) return;
+    mail = u.email;
+    try { localStorage.setItem('smartsaver_current_user', mail); } catch(e){}
+  }
+
+  SSCloud.syncDown(mail).then(changed => {
+    // boot() returned before wiring any of the dashboard's controls, so there is
+    // nothing to repaint into — a reload is the honest way to enter the real view
+    if(changed) location.reload();
+  });
+}
+
+/* every field the landing page stores is a string — read it back as a safe number */
+function n(field, fallback){
+  const v = parseFloat(record[field]);
+  return isFinite(v) && v >= 0 ? v : (fallback || 0);
+}
+
+function model(){
+  const goalCost = Math.max(n('goalCost', 0), 1);
+  const saved = n('alreadySaved', 0);
+  const allowance = n('weeklyAllowance', 0);
+  const monthlyExtra = n('monthlyExtra', 0);
+  const expenses = n('weeklyExpenses', 0);
+  const extraWeekly = monthlyExtra / MONTH_WEEKS;
+  const baseWeekly = allowance + extraWeekly - expenses;
+  // the landing page bounds the cutback slider to weekly expenses — mirror that, never double-count
+  const cut = Math.min(Math.max(parseFloat(record.cutbackValue) || 0, 0), expenses);
+  const improvedWeekly = baseWeekly + cut;
+  const remaining = Math.max(goalCost - saved, 0);
+  const baseDays = remaining === 0 ? 0 : (baseWeekly > 0 ? (remaining / baseWeekly) * 7 : Infinity);
+  const improvedDays = remaining === 0 ? 0 : (improvedWeekly > 0 ? (remaining / improvedWeekly) * 7 : Infinity);
+  return {
+    name: (record.goalName || '').trim(),
+    goalCost, saved, allowance, monthlyExtra, extraWeekly, expenses,
+    cut, baseWeekly, improvedWeekly, remaining, baseDays, improvedDays,
+    pct: pctOf(saved, goalCost)
+  };
+}
+
+/* ---------- rendering ---------- */
+function renderGoal(m){
+  $('goalEmoji').textContent = goalEmoji(m.name);
+  // not plain "goalName": the landing page owns that id for its simulator input,
+  // and the single-file build puts both documents in one DOM
+  $('dashGoalName').textContent = m.name || t('dash.goal.title');
+  $('goalSaved').textContent = money(m.saved);
+  $('goalOf').textContent = t('dash.goal.of', { total: money(m.goalCost) });
+  $('goalPct').textContent = Math.round(m.pct) + '%';
+  $('ringFill').style.strokeDashoffset = String(439.8 * (1 - m.pct / 100));
+  $('ringFill').style.stroke = m.pct >= 100 ? 'var(--gold-light)' : 'url(#ringGrad)';
+  $('goalBar').style.width = m.pct + '%';
+  $('goalRemaining').innerHTML = m.remaining <= 0
+    ? t('dash.goal.reached')
+    : t('dash.goal.remaining', { amount: money(m.remaining) });
+
+  const tags = [];
+  if(m.remaining <= 0){
+    tags.push('<span class="tag gold">' + ICON.trophy + t('dash.kpi.reached') + '</span>');
+  } else if(isFinite(m.improvedDays)){
+    tags.push('<span class="tag good">' + ICON.calendar + fmtDate(addDays(new Date(), m.improvedDays)) + '</span>');
+    tags.push('<span class="tag">' + t('dash.kpi.days', { n: num(m.improvedDays) }) + '</span>');
+  } else {
+    tags.push('<span class="tag bad">' + t('dash.kpi.never') + '</span>');
+  }
+  if(m.cut > 0) tags.push('<span class="tag gold">' + ICON.scissors + t('dash.kpi.cutof', { amount: money(m.cut) }) + '</span>');
+  $('goalTags').innerHTML = tags.join('');
+}
+
+function renderKpis(m){
+  const weeklyEl = $('kpiWeekly');
+  weeklyEl.textContent = money(m.baseWeekly);
+  weeklyEl.className = 'kpi-val ' + (m.baseWeekly > 0 ? 'accent' : 'warn');
+  $('kpiWeeklySub').textContent = m.baseWeekly > 0
+    ? t('dash.kpi.weekly.sub', { allowance: money(m.allowance), extra: money(m.extraWeekly), expenses: money(m.expenses) })
+    : t('dash.kpi.weekly.warn');
+
+  if(m.remaining <= 0){
+    $('kpiBase').textContent = t('dash.kpi.reached');
+    $('kpiBaseSub').textContent = '';
+  } else if(isFinite(m.baseDays)){
+    $('kpiBase').textContent = fmtDate(addDays(new Date(), m.baseDays));
+    $('kpiBaseSub').textContent = t('dash.kpi.days', { n: num(m.baseDays) });
+  } else {
+    $('kpiBase').textContent = t('dash.kpi.never');
+    $('kpiBaseSub').textContent = t('dash.kpi.weekly.warn');
+  }
+
+  if(m.remaining <= 0){
+    $('kpiImproved').textContent = t('dash.kpi.reached');
+    $('kpiImprovedSub').textContent = '';
+  } else if(m.cut <= 0){
+    $('kpiImproved').textContent = '—';
+    $('kpiImprovedSub').textContent = t('dash.kpi.nocut');
+  } else if(isFinite(m.improvedDays)){
+    $('kpiImproved').textContent = fmtDate(addDays(new Date(), m.improvedDays));
+    $('kpiImprovedSub').textContent = t('dash.kpi.cutof', { amount: money(m.cut) });
+  } else {
+    $('kpiImproved').textContent = t('dash.kpi.never');
+    $('kpiImprovedSub').textContent = '';
+  }
+
+  const daysSaved = (isFinite(m.baseDays) && isFinite(m.improvedDays)) ? Math.max(Math.round(m.baseDays - m.improvedDays), 0) : 0;
+  $('kpiDays').textContent = daysSaved > 0 ? num(daysSaved) : '0';
+  $('kpiDaysSub').textContent = daysSaved > 0 ? t('dash.kpi.daysoff') : t('dash.kpi.nocut');
+}
+
+function renderMilestones(m){
+  const list = $('msList');
+  list.innerHTML = MILESTONES.map(step => {
+    const amount = m.goalCost * step / 100;
+    const done = m.saved >= amount - 0.001;
+    let when = '';
+    if(done){
+      when = t('dash.ms.reached');
+    } else if(m.improvedWeekly > 0){
+      const days = ((amount - m.saved) / m.improvedWeekly) * 7;
+      when = fmtDate(addDays(new Date(), days));
+    } else {
+      when = t('dash.kpi.never');
+    }
+    const icon = step === 100 ? ICON.trophy : (done ? ICON.check : step + '%');
+    return '<div class="ms' + (done ? ' done' : '') + (step === 100 ? ' final' : '') + '">' +
+             '<span class="ms-dot">' + icon + '</span>' +
+             '<span class="ms-txt"><b>' + step + '%</b><small>' + when + '</small></span>' +
+             '<span class="ms-amt">' + money(amount) + '</span>' +
+           '</div>';
+  }).join('');
+}
+
+function renderBreakdown(m){
+  const rows = [
+    { k: t('dash.bd.allowance'), v: '+' + money(m.allowance), cls: 'pos' },
+    { k: t('dash.bd.extra', { n: MONTH_WEEKS }), v: '+' + money(m.extraWeekly), cls: 'pos' },
+    { k: t('dash.bd.expenses'), v: '−' + money(m.expenses), cls: 'neg' }
+  ];
+  if(m.cut > 0) rows.push({ k: t('dash.bd.cut'), v: '+' + money(m.cut), cls: 'pos' });
+  let html = rows.map(r => '<div class="bd-row"><span class="k">' + r.k + '</span><span class="v ' + r.cls + '">' + r.v + '</span></div>').join('');
+  html += '<div class="bd-row total"><span class="k">' + t('dash.bd.total') + '</span><span class="v">' + money(m.improvedWeekly) + '</span></div>';
+  $('bdRows').innerHTML = html;
+
+  const days = isFinite(m.improvedDays) ? num(m.improvedDays) : '∞';
+  $('bdFormula').textContent =
+    '(' + money(m.goalCost) + ' − ' + money(m.saved) + ') ÷ (' + money(m.improvedWeekly) + ' ÷ 7) = ' + days + ' days';
+}
+
+function renderHistory(){
+  const list = $('histList');
+  const deps = Array.isArray(record.deposits) ? record.deposits : [];
+  if(!deps.length){
+    list.innerHTML = '<div class="empty-inline">' + t('dash.hist.empty') + '</div>';
+    $('histTotal').textContent = '';
+    return;
+  }
+  const total = deps.reduce((s, d) => s + (parseFloat(d.amount) || 0), 0);
+  $('histTotal').textContent = t('dash.hist.total', { amount: money(total) });
+  list.innerHTML = deps.slice().reverse().map(d => {
+    const when = new Date(d.ts);
+    return '<div class="hist-row">' +
+             '<span class="hist-ico">+</span>' +
+             '<span class="hist-main"><b>' + money(d.amount) + '</b><small>' + fmtDateShort(when) + ' · ' + t('dash.hist.deposit') + '</small></span>' +
+             '<button class="hist-del" type="button" data-ts="' + d.ts + '" title="' + t('dash.hist.undo') + '" aria-label="' + t('dash.hist.undo') + '">' +
+               '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 5l14 14M19 5L5 19"/></svg>' +
+             '</button>' +
+           '</div>';
+  }).join('');
+
+  list.querySelectorAll('.hist-del').forEach(btn => {
+    btn.addEventListener('click', () => removeDeposit(parseInt(btn.dataset.ts, 10)));
+  });
+}
+
+/* ---------- chart ---------- */
+function drawChart(m){
+  const canvas = $('chart');
+  const ctx = canvas.getContext('2d');
+  const dpr = window.devicePixelRatio || 1;
+  const rect = canvas.getBoundingClientRect();
+  const W = rect.width || 900;
+  const H = rect.height || 270;
+  canvas.width = W * dpr; canvas.height = H * dpr;
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  ctx.clearRect(0, 0, W, H);
+
+  const padL = 12, padR = 12, padT = 18, padB = 30;
+  const plotW = W - padL - padR, plotH = H - padT - padB;
+
+  const baseDays = isFinite(m.baseDays) ? m.baseDays : 0;
+  const improvedDays = isFinite(m.improvedDays) ? m.improvedDays : 0;
+  const maxDays = Math.max(baseDays, improvedDays, 7);
+  const maxY = Math.max(m.goalCost * 1.1, m.saved * 1.1, 1);
+
+  const xOf = (d) => padL + (d / maxDays) * plotW;
+  const yOf = (v) => padT + plotH - (v / maxY) * plotH;
+
+  // faint horizontal guides
+  ctx.strokeStyle = 'rgba(255,255,255,0.055)';
+  ctx.lineWidth = 1;
+  for(let i = 0; i <= 4; i++){
+    const y = padT + (plotH * i) / 4;
+    ctx.beginPath(); ctx.moveTo(padL, y); ctx.lineTo(W - padR, y); ctx.stroke();
+  }
+
+  // goal line
+  ctx.strokeStyle = 'rgba(228,205,148,0.85)';
+  ctx.setLineDash([6, 6]); ctx.lineWidth = 1.6;
+  ctx.beginPath(); ctx.moveTo(padL, yOf(m.goalCost)); ctx.lineTo(W - padR, yOf(m.goalCost)); ctx.stroke();
+  ctx.setLineDash([]);
+
+  function line(weeklyRate, daysToGoal, color, width, fill){
+    if(weeklyRate <= 0 && m.remaining > 0) return;
+    const daily = weeklyRate / 7;
+    const stop = daysToGoal > 0 ? daysToGoal : maxDays;
+    const pts = [];
+    const steps = 60;
+    for(let i = 0; i <= steps; i++){
+      const d = (maxDays * i) / steps;
+      const capped = Math.min(d, stop);
+      const val = Math.min(m.saved + daily * capped, m.goalCost);
+      pts.push([xOf(d), yOf(val)]);
+    }
+    if(fill){
+      const grad = ctx.createLinearGradient(0, padT, 0, padT + plotH);
+      grad.addColorStop(0, 'rgba(127,176,255,0.22)');
+      grad.addColorStop(1, 'rgba(127,176,255,0)');
+      ctx.fillStyle = grad;
+      ctx.beginPath();
+      ctx.moveTo(pts[0][0], padT + plotH);
+      pts.forEach(p => ctx.lineTo(p[0], p[1]));
+      ctx.lineTo(pts[pts.length - 1][0], padT + plotH);
+      ctx.closePath(); ctx.fill();
+    }
+    ctx.strokeStyle = color; ctx.lineWidth = width; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+    ctx.beginPath();
+    pts.forEach((p, i) => i === 0 ? ctx.moveTo(p[0], p[1]) : ctx.lineTo(p[0], p[1]));
+    ctx.stroke();
+  }
+
+  line(m.baseWeekly, baseDays, 'rgba(255,255,255,0.42)', 2.5, false);
+  line(m.improvedWeekly, improvedDays, '#7FB0FF', 3.2, true);
+
+  // arrival marker
+  if(m.remaining > 0 && isFinite(m.improvedDays) && m.improvedWeekly > 0){
+    const x = xOf(improvedDays), y = yOf(m.goalCost);
+    ctx.fillStyle = '#E4CD94';
+    ctx.beginPath(); ctx.arc(x, y, 5.5, 0, Math.PI * 2); ctx.fill();
+    ctx.strokeStyle = 'rgba(228,205,148,0.35)'; ctx.lineWidth = 6;
+    ctx.beginPath(); ctx.arc(x, y, 5.5, 0, Math.PI * 2); ctx.stroke();
+  }
+
+  // starting dot
+  ctx.fillStyle = '#7FB0FF';
+  ctx.beginPath(); ctx.arc(xOf(0), yOf(m.saved), 4.5, 0, Math.PI * 2); ctx.fill();
+
+  // axis labels — 'start'/'end' follow the page direction and clipped the text off-canvas in RTL,
+  // so anchor them to the physical edges instead
+  ctx.fillStyle = 'rgba(255,255,255,0.42)';
+  ctx.font = '11px Heebo, sans-serif';
+  ctx.textAlign = 'left';
+  ctx.fillText(t('dash.chart.today'), padL, H - 10);
+  if(m.remaining > 0 && isFinite(m.improvedDays) && m.improvedWeekly > 0){
+    ctx.textAlign = 'right';
+    ctx.fillText(fmtDateShort(addDays(new Date(), maxDays)), W - padR, H - 10);
+  }
+  ctx.textAlign = 'left';
+  ctx.fillStyle = 'rgba(228,205,148,0.8)';
+  ctx.fillText(money(m.goalCost), padL + 2, Math.max(yOf(m.goalCost) - 8, 13));
+}
+
+/* ---------- deposits ---------- */
+function addDeposit(amount){
+  amount = Math.round((parseFloat(amount) || 0) * 100) / 100;
+  if(!(amount > 0)) return;
+  record.alreadySaved = String(n('alreadySaved', 0) + amount);
+  if(!Array.isArray(record.deposits)) record.deposits = [];
+  record.deposits.push({ ts: Date.now(), amount: amount });
+  saveRecord();
+  render();
+  flash(t('dash.dep.done', { amount: money(amount) }));
+
+  const m = model();
+  const row = {
+    email: email || '',
+    goalName: m.name,
+    goalCost: Math.round(m.goalCost),
+    saved: Math.round(m.saved),
+    amount: amount,
+    pct: Math.round(m.pct)
+  };
+  SheetLog.send('deposit', row);
+  if(window.SSCloud) SSCloud.logEvent('deposit', row);
+}
+function removeDeposit(ts){
+  if(!Array.isArray(record.deposits)) return;
+  const idx = record.deposits.findIndex(d => d.ts === ts);
+  if(idx === -1) return;
+  const amount = parseFloat(record.deposits[idx].amount) || 0;
+  record.deposits.splice(idx, 1);
+  record.alreadySaved = String(Math.max(n('alreadySaved', 0) - amount, 0));
+  saveRecord();
+  render();
+}
+let flashTimer = 0;
+function flash(msg){
+  const el = $('depFlash');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(flashTimer);
+  flashTimer = setTimeout(() => el.classList.remove('show'), 2600);
+}
+
+/* ---------- backup / restore ----------
+   Everything lives in this one browser's localStorage, so a cleared history wipes
+   the goal. A JSON file is both the safety net and the way onto a second device. */
+const BACKUP_VERSION = 1;
+const BACKUP_PREFIX = 'smartsaver_';
+
+let backupFlashTimer = 0;
+// two hosts: the card inside the dashboard and the one on the lock screen. Only one
+// is ever on screen, so write to both rather than guessing which.
+function backupFlash(msg, kind){
+  const els = [$('backupFlash'), $('lockedFlash')].filter(Boolean);
+  if(!els.length) return;
+  els.forEach(el => {
+    el.textContent = msg;
+    el.className = 'backup-flash show ' + (kind || 'ok');
+  });
+  clearTimeout(backupFlashTimer);
+  backupFlashTimer = setTimeout(() => els.forEach(el => el.classList.remove('show')), 6000);
+}
+
+function collectBackup(){
+  const data = {};
+  for(let i = 0; i < localStorage.length; i++){
+    const k = localStorage.key(i);
+    // the send-retry queue is transient state, not user data — it must not travel
+    if(k && k.indexOf(BACKUP_PREFIX) === 0 && k !== 'smartsaver_sheet_queue'){
+      data[k] = localStorage.getItem(k);
+    }
+  }
+  return {
+    app: 'SmartSaver AI',
+    version: BACKUP_VERSION,
+    savedAt: new Date().toISOString(),
+    keys: Object.keys(data).length,
+    data: data
+  };
+}
+
+function exportBackup(){
+  let payload;
+  try { payload = collectBackup(); }
+  catch(e){ backupFlash(t('dash.backup.errRead'), 'err'); return; }
+
+  if(!payload.keys){ backupFlash(t('dash.backup.errEmpty'), 'err'); return; }
+
+  const stamp = new Date().toISOString().slice(0, 10);
+  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'smartsaver-backup-' + stamp + '.json';
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  // revoking immediately can cancel the download in some browsers
+  setTimeout(() => URL.revokeObjectURL(url), 4000);
+  backupFlash(t('dash.backup.okExport', { n: payload.keys }), 'ok');
+}
+
+function applyBackup(payload){
+  if(!payload || typeof payload !== 'object' || !payload.data || typeof payload.data !== 'object'){
+    throw new Error('shape');
+  }
+  if(payload.app !== 'SmartSaver AI') throw new Error('app');
+  if(Number(payload.version) > BACKUP_VERSION) throw new Error('newer');
+
+  const entries = Object.entries(payload.data)
+    .filter(([k, v]) => typeof k === 'string' && k.indexOf(BACKUP_PREFIX) === 0 && typeof v === 'string');
+  if(!entries.length) throw new Error('empty');
+
+  // clear only our own keys, so a restore replaces rather than merges into stale data
+  const mine = [];
+  for(let i = 0; i < localStorage.length; i++){
+    const k = localStorage.key(i);
+    if(k && k.indexOf(BACKUP_PREFIX) === 0) mine.push(k);
+  }
+  mine.forEach(k => localStorage.removeItem(k));
+  entries.forEach(([k, v]) => localStorage.setItem(k, v));
+  return entries.length;
+}
+
+function importBackup(file){
+  const reader = new FileReader();
+  reader.onerror = () => backupFlash(t('dash.backup.errRead'), 'err');
+  reader.onload = () => {
+    let payload;
+    try { payload = JSON.parse(reader.result); }
+    catch(e){ backupFlash(t('dash.backup.errParse'), 'err'); return; }
+
+    if(!window.confirm(t('dash.backup.confirm'))) return;
+
+    let count;
+    try { count = applyBackup(payload); }
+    catch(e){
+      backupFlash(e.message === 'newer' ? t('dash.backup.errNewer') : t('dash.backup.errParse'), 'err');
+      return;
+    }
+    backupFlash(t('dash.backup.okImport', { n: count }), 'ok');
+    // the whole page reads localStorage at boot — a reload is the honest way to apply it
+    setTimeout(() => location.reload(), 900);
+  };
+  reader.readAsText(file);
+}
+
+/* ---------- wiring ---------- */
+function renderStreak(){
+  const s = streakInfo(record.deposits);
+  const card = $('streakCard');
+  if(!card) return;
+
+  card.classList.toggle('live', s.current > 0);
+  $('streakNum').textContent = num(s.current);
+
+  let sub;
+  if(s.current === 0)          sub = t('dash.streak.none');
+  else if(s.thisWeekDone)      sub = t('dash.streak.safe');
+  else                         sub = t('dash.streak.risk');
+  $('streakSub').textContent = sub;
+
+  // only worth showing once it beats the run in progress
+  const bestEl = $('streakBest');
+  bestEl.textContent = s.best > s.current ? t('dash.streak.best', { n: num(s.best) }) : '';
+  bestEl.hidden = !(s.best > s.current);
+
+  // only the current week is labelled: "-1"/"-2" flip to "1-"/"2-" under RTL and
+  // read as nonsense, and eight dates would drown the strip
+  $('streakWeeks').innerHTML = s.recent.map((on, i) => {
+    const isNow = i === s.recent.length - 1;
+    return '<span class="' + (on ? 'on ' : '') + (isNow ? 'now' : '') + '">' +
+           (isNow ? t('dash.streak.wLabel') : '') + '</span>';
+  }).join('');
+}
+
+function render(){
+  const m = model();
+  renderGoal(m);
+  renderStreak();
+  renderKpis(m);
+  renderMilestones(m);
+  renderBreakdown(m);
+  renderHistory();
+  drawChart(m);
+}
+
+function wireBackup(){
+  const impFile = $('backupFile');
+  const expBtn = $('backupExport');
+  if(expBtn) expBtn.addEventListener('click', exportBackup);
+  if(!impFile) return;
+  [$('backupImportBtn'), $('lockedRestoreBtn')].forEach(b => {
+    if(b) b.addEventListener('click', () => impFile.click());
+  });
+  impFile.addEventListener('change', () => {
+    const f = impFile.files && impFile.files[0];
+    if(f) importBackup(f);
+    impFile.value = ''; // so picking the same file twice still fires
+  });
+}
+
+function boot(){
+  restorePrefs();
+  // must be wired before the gate below returns — restoring is the whole point of
+  // arriving here on a device that has no data yet
+  wireBackup();
+
+  if(!loadRecord() || record.goalCost === undefined){
+    $('lockedView').hidden = false;
+    cloudRescue();
+    return;
+  }
+
+  $('dashView').hidden = false;
+  $('userChip').hidden = false;
+  $('userAvatar').textContent = (email.trim().charAt(0) || '?').toUpperCase();
+  paintProviderBadge();
+  $('userMail').textContent = email;
+  $('greeting').textContent = t('dash.hello', { name: email.split('@')[0] });
+  $('depCur').textContent = cur();
+
+  // quick amounts scale with the goal, so they stay meaningful for a ₪50 goal and a ₪5,000 one
+  const goalCost = Math.max(n('goalCost', 0), 1);
+  const unit = goalCost >= 4000 ? 10 : (goalCost >= 800 ? 5 : 1);
+  const steps = QUICK_STEPS.map(s => Math.max(Math.round((s * unit) / 5), 1));
+  $('depQuick').innerHTML = steps.map(s => '<button type="button" data-add="' + s + '">+' + money(s) + '</button>').join('');
+  $('depQuick').querySelectorAll('button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const input = $('depInput');
+      input.value = String((parseFloat(input.value) || 0) + parseFloat(btn.dataset.add));
+      syncDepBtn();
+      input.focus();
+    });
+  });
+
+  // backup lives outside the goal gate: it must work even with an empty record
+  $('depInput').addEventListener('input', syncDepBtn);
+  $('depInput').addEventListener('keydown', (e) => { if(e.key === 'Enter') submitDeposit(); });
+  $('depBtn').addEventListener('click', submitDeposit);
+
+  $('themeBtn').addEventListener('click', () => {
+    const dark = !document.documentElement.classList.contains('theme-dark');
+    document.documentElement.classList.toggle('theme-dark', dark);
+    try { localStorage.setItem('smartsaver_theme', dark ? 'dark' : 'light'); } catch(e){}
+    record.theme = dark ? 'dark' : 'light';
+    saveRecord();
+  });
+
+  render();
+  window.addEventListener('resize', () => drawChart(model()));
+  // if the landing page is open in another tab, keep both views on the same truth
+  window.addEventListener('storage', (e) => {
+    if(!e.key || e.key === userKey(email)){
+      if(loadRecord()) render();
+    }
+  });
+
+  // the other device is the third source of truth — check it on the moments that
+  // actually mean "the user came back", not on a timer that drains a phone battery
+  syncFromCloud();
+  window.addEventListener('online', syncFromCloud);
+  document.addEventListener('visibilitychange', () => {
+    if(document.visibilityState === 'visible') syncFromCloud();
+  });
+}
+
+function syncDepBtn(){
+  const v = parseFloat($('depInput').value);
+  $('depBtn').disabled = !(isFinite(v) && v > 0);
+}
+function submitDeposit(){
+  const input = $('depInput');
+  const v = parseFloat(input.value);
+  if(!(isFinite(v) && v > 0)) return;
+  addDeposit(v);
+  input.value = '';
+  syncDepBtn();
+}
+
+boot();
+</script>
+</body>
+</html>

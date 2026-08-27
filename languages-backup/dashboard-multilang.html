@@ -1,0 +1,1257 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SmartSaver AI — Dashboard</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@500;700;800;900&family=Heebo:wght@300;400;500;600;700&family=Noto+Sans+Arabic:wght@500;700;800&family=Noto+Sans:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#071A3B;
+    --navy-2:#0D2557;
+    --blue:#1F5EFF;
+    --blue-2:#3E7BFF;
+    --blue-light:#7FB0FF;
+    --ice:#EEF4FF;
+    --white:#FFFFFF;
+    --black:#05070C;
+    --gold:#C9A961;
+    --gold-light:#E4CD94;
+    --green:#3DDC97;
+    --red:#FF7A7A;
+    --line: rgba(255,255,255,0.12);
+    --radius: 20px;
+    /* kept in sync with the landing page's Background picker */
+    --accent-rgb: 63 123 255;
+    --accent-light-rgb: 127 176 255;
+  }
+
+  *{box-sizing:border-box;}
+  /* our flex/grid rules would otherwise beat the UA's [hidden] rule */
+  [hidden]{display:none !important;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0; min-height:100vh;
+    font-family:'Heebo','Noto Sans Arabic','Noto Sans',sans-serif;
+    color:#C7D2E8;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+    background:
+      radial-gradient(900px 520px at 88% -6%, rgb(var(--accent-rgb) / 0.35), transparent 60%),
+      radial-gradient(760px 480px at 4% 100%, rgba(139,92,255,0.22), transparent 62%),
+      linear-gradient(180deg,
+        color-mix(in srgb, rgb(var(--accent-rgb)) 32%, var(--navy)) 0%,
+        color-mix(in srgb, rgb(var(--accent-rgb)) 18%, #08183a) 46%,
+        color-mix(in srgb, rgb(var(--accent-rgb)) 10%, #060F26) 100%);
+    background-attachment:fixed;
+    transition:background .5s ease;
+  }
+  html.theme-dark body{
+    background:
+      radial-gradient(900px 520px at 88% -6%, rgb(var(--accent-rgb) / 0.16), transparent 60%),
+      radial-gradient(760px 480px at 4% 100%, rgba(139,92,255,0.14), transparent 62%),
+      linear-gradient(180deg,
+        color-mix(in srgb, rgb(var(--accent-rgb)) 14%, #060D1F) 0%,
+        color-mix(in srgb, rgb(var(--accent-rgb)) 8%, #04091A) 50%,
+        color-mix(in srgb, rgb(var(--accent-rgb)) 5%, #02050B) 100%);
+  }
+  h1,h2,h3,.display{font-family:'Rubik','Noto Sans Arabic','Noto Sans',sans-serif; font-weight:800; letter-spacing:-0.01em; margin:0;}
+  p{margin:0;}
+  a{color:inherit; text-decoration:none;}
+  button{font-family:inherit; cursor:pointer; border:none;}
+  input{font-family:inherit;}
+  svg{display:block;}
+  .container{max-width:1240px; margin:0 auto; padding:0 28px;}
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important;}
+  }
+
+  /* ===== TOPBAR ===== */
+  .topbar{
+    position:sticky; top:0; z-index:60;
+    background:rgba(6,16,38,0.72);
+    backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px);
+    border-bottom:1px solid var(--line);
+  }
+  .topbar-inner{display:flex; align-items:center; gap:14px; padding:14px 0;}
+  .brand{display:flex; align-items:center; gap:11px; color:var(--white); font-family:'Rubik'; font-weight:800; font-size:1.05rem; white-space:nowrap;}
+  .brand-mark{
+    width:34px; height:34px; border-radius:10px; flex-shrink:0;
+    background:linear-gradient(135deg, rgb(var(--accent-light-rgb)), rgb(var(--accent-rgb)));
+    display:flex; align-items:center; justify-content:center;
+    box-shadow:0 4px 14px rgb(var(--accent-rgb) / 0.4);
+  }
+  .brand-mark svg{width:19px; height:19px; color:#fff;}
+  .brand-sub{
+    font-family:'Heebo'; font-weight:500; font-size:0.78rem; color:var(--gold-light);
+    background:rgba(201,169,97,0.14); border:1px solid rgba(201,169,97,0.35);
+    padding:3px 10px; border-radius:100px; margin-inline-start:2px;
+  }
+  .topbar-spacer{flex:1;}
+  .icon-btn{
+    width:36px; height:36px; border-radius:10px; flex-shrink:0;
+    border:1px solid rgba(255,255,255,0.22); background:rgba(255,255,255,0.05);
+    color:var(--white); display:flex; align-items:center; justify-content:center;
+    transition:background .2s ease, border-color .2s ease, transform .2s ease;
+  }
+  .icon-btn:hover{background:rgba(255,255,255,0.14); border-color:rgba(255,255,255,0.45); transform:translateY(-1px);}
+  .icon-btn svg{width:16px; height:16px;}
+  html.theme-dark .icon-btn.theme{background:rgba(201,169,97,0.14); border-color:rgba(201,169,97,0.42); color:var(--gold-light);}
+  .back-btn{
+    display:inline-flex; align-items:center; gap:8px; white-space:nowrap;
+    padding:9px 18px; border-radius:100px; font-weight:700; font-size:0.88rem;
+    background:var(--white); color:var(--navy);
+    transition:transform .2s ease, box-shadow .2s ease;
+  }
+  .back-btn:hover{transform:translateY(-2px); box-shadow:0 10px 24px rgba(0,0,0,0.35);}
+  .back-btn svg{width:15px; height:15px;}
+  [dir="rtl"] .back-btn svg{transform:scaleX(-1);}
+  .user-chip{
+    display:flex; align-items:center; gap:9px; max-width:230px;
+    padding:5px 14px 5px 5px; border-radius:100px;
+    background:rgba(255,255,255,0.06); border:1px solid var(--line);
+  }
+  [dir="rtl"] .user-chip{padding:5px 5px 5px 14px;}
+  .user-avatar{
+    width:28px; height:28px; border-radius:50%; flex-shrink:0;
+    background:linear-gradient(135deg, var(--blue), var(--blue-2));
+    display:flex; align-items:center; justify-content:center;
+    color:#fff; font-family:'Rubik'; font-weight:800; font-size:0.8rem;
+  }
+  .user-mail{font-size:0.8rem; color:rgba(255,255,255,0.75); overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+
+  /* ===== PAGE HEAD ===== */
+  .page-head{padding:44px 0 8px;}
+  .page-head h1{font-size:clamp(1.7rem,3.4vw,2.5rem); color:var(--white); line-height:1.2;}
+  .page-head p{margin-top:10px; color:rgba(255,255,255,0.6); font-size:1rem; font-weight:300;}
+
+  /* ===== CARDS / GRID ===== */
+  .grid{display:grid; gap:22px; padding:26px 0 60px;}
+  .row-main{grid-template-columns:1.45fr 1fr;}
+  .row-kpi{grid-template-columns:repeat(4,1fr);}
+  .row-split{grid-template-columns:1.45fr 1fr;}
+  .card{
+    background:linear-gradient(160deg, rgba(255,255,255,0.075), rgba(255,255,255,0.028));
+    border:1px solid var(--line);
+    border-radius:24px; padding:26px 24px;
+    backdrop-filter:blur(6px);
+    box-shadow:0 24px 60px rgba(3,10,30,0.3), inset 0 1px 0 rgba(255,255,255,0.08);
+  }
+  .card-head{display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:18px;}
+  .card-title{display:flex; align-items:center; gap:9px; color:var(--white); font-size:1.02rem; font-family:'Rubik'; font-weight:700;}
+  .card-title svg{width:17px; height:17px; color:var(--blue-light); flex-shrink:0;}
+  .card-note{font-size:0.76rem; color:rgba(255,255,255,0.45);}
+
+  /* ===== GOAL CARD ===== */
+  .goal-body{display:flex; align-items:center; gap:28px; flex-wrap:wrap;}
+  .ring-wrap{position:relative; width:172px; height:172px; flex-shrink:0;}
+  /* progress always runs clockwise — a mirrored ring reads as "going backwards" */
+  .ring{width:100%; height:100%; transform:rotate(-90deg);}
+  .ring-track{fill:none; stroke:rgba(255,255,255,0.1); stroke-width:11;}
+  .ring-fill{
+    fill:none; stroke:url(#ringGrad); stroke-width:11; stroke-linecap:round;
+    stroke-dasharray:439.8; stroke-dashoffset:439.8;
+    transition:stroke-dashoffset .9s cubic-bezier(.22,1,.36,1);
+  }
+  .ring-center{
+    position:absolute; inset:0; display:flex; flex-direction:column;
+    align-items:center; justify-content:center; gap:2px; text-align:center;
+  }
+  .ring-emoji{font-size:1.5rem; line-height:1;}
+  .ring-pct{font-family:'Rubik'; font-weight:900; font-size:1.9rem; color:var(--white); line-height:1.05;}
+  .ring-label{font-size:0.7rem; color:rgba(255,255,255,0.5);}
+  .goal-facts{flex:1; min-width:230px;}
+  .goal-name{font-family:'Rubik'; font-weight:800; font-size:1.5rem; color:var(--white); line-height:1.25; word-break:break-word;}
+  .goal-money{display:flex; align-items:baseline; gap:8px; margin-top:12px; flex-wrap:wrap;}
+  .goal-money .saved{font-family:'Rubik'; font-weight:900; font-size:2rem; color:var(--blue-light); text-shadow:0 0 26px rgb(var(--accent-light-rgb) / 0.35);}
+  .goal-money .of{font-size:0.95rem; color:rgba(255,255,255,0.55);}
+  .goal-remaining{margin-top:8px; font-size:0.9rem; color:rgba(255,255,255,0.62);}
+  .goal-remaining b{color:var(--white); font-family:'Rubik'; font-weight:700;}
+  .goal-bar{height:7px; border-radius:100px; background:rgba(255,255,255,0.1); margin-top:16px; overflow:hidden;}
+  .goal-bar span{
+    display:block; height:100%; border-radius:100px; width:0;
+    background:linear-gradient(90deg, rgb(var(--accent-light-rgb)), rgb(var(--accent-rgb)));
+    transition:width .9s cubic-bezier(.22,1,.36,1);
+  }
+  .goal-tags{display:flex; gap:8px; flex-wrap:wrap; margin-top:16px;}
+  .tag{
+    font-size:0.76rem; font-weight:600; padding:5px 12px; border-radius:100px;
+    background:rgba(255,255,255,0.07); border:1px solid var(--line); color:rgba(255,255,255,0.75);
+  }
+  .tag.gold{background:rgba(201,169,97,0.16); border-color:rgba(201,169,97,0.4); color:var(--gold-light);}
+  .tag.good{background:rgba(61,220,151,0.14); border-color:rgba(61,220,151,0.35); color:var(--green);}
+  .tag.bad{background:rgba(255,122,122,0.14); border-color:rgba(255,122,122,0.35); color:var(--red);}
+
+  /* ===== DEPOSIT CARD ===== */
+  .dep-amount{
+    display:flex; align-items:baseline; justify-content:center; gap:6px;
+    padding:16px 0 6px;
+  }
+  .dep-amount .cur{font-size:1.1rem; color:rgba(255,255,255,0.55); font-weight:600;}
+  .dep-input{
+    width:100%; max-width:190px; background:transparent; border:none; outline:none;
+    font-family:'Rubik'; font-weight:900; font-size:2.4rem; color:var(--white);
+    text-align:center; padding:0; -moz-appearance:textfield;
+  }
+  .dep-input::placeholder{color:rgba(255,255,255,0.22);}
+  .dep-input::-webkit-outer-spin-button, .dep-input::-webkit-inner-spin-button{-webkit-appearance:none; margin:0;}
+  .dep-quick{display:flex; gap:8px; justify-content:center; flex-wrap:wrap; margin:12px 0 18px;}
+  .dep-quick button{
+    padding:7px 15px; border-radius:100px; font-size:0.83rem; font-weight:700;
+    background:rgba(255,255,255,0.07); border:1px solid var(--line); color:rgba(255,255,255,0.8);
+    transition:background .2s ease, border-color .2s ease, transform .15s ease;
+  }
+  .dep-quick button:hover{background:rgb(var(--accent-rgb) / 0.22); border-color:rgb(var(--accent-light-rgb) / 0.5); color:var(--white); transform:translateY(-1px);}
+  .btn-primary{
+    display:flex; align-items:center; justify-content:center; gap:9px; width:100%;
+    background:linear-gradient(100deg, var(--blue) 0%, var(--blue-2) 55%, #6B5FFF 130%);
+    color:var(--white); padding:14px 22px; border-radius:100px;
+    font-weight:800; font-size:0.95rem;
+    box-shadow:0 12px 30px rgb(var(--accent-rgb) / 0.4), inset 0 1px 0 rgba(255,255,255,0.25);
+    transition:transform .25s cubic-bezier(.22,1,.36,1), box-shadow .25s ease, opacity .2s ease;
+  }
+  .btn-primary:hover:not(:disabled){transform:translateY(-2px); box-shadow:0 20px 44px rgb(var(--accent-rgb) / 0.5), inset 0 1px 0 rgba(255,255,255,0.3);}
+  .btn-primary:disabled{opacity:.4; cursor:not-allowed;}
+  .btn-primary svg{width:16px; height:16px;}
+  .dep-hint{margin-top:12px; font-size:0.76rem; color:rgba(255,255,255,0.42); text-align:center; line-height:1.6;}
+  .dep-flash{
+    margin-top:12px; text-align:center; font-size:0.85rem; font-weight:700; color:var(--green);
+    opacity:0; transform:translateY(4px); transition:opacity .3s ease, transform .3s ease;
+  }
+  .dep-flash.show{opacity:1; transform:translateY(0);}
+
+  /* ===== KPI TILES ===== */
+  .kpi{
+    background:linear-gradient(160deg, rgba(255,255,255,0.07), rgba(255,255,255,0.025));
+    border:1px solid var(--line); border-radius:20px; padding:20px 20px 18px;
+    box-shadow:0 16px 40px rgba(3,10,30,0.25);
+    transition:transform .3s cubic-bezier(.22,1,.36,1), border-color .3s ease, box-shadow .3s ease;
+  }
+  .kpi:hover{transform:translateY(-4px); border-color:rgb(var(--accent-light-rgb) / 0.4); box-shadow:0 26px 54px rgba(3,10,30,0.4);}
+  .kpi-top{display:flex; align-items:center; gap:8px; margin-bottom:12px;}
+  .kpi-ico{
+    width:30px; height:30px; border-radius:9px; flex-shrink:0;
+    display:flex; align-items:center; justify-content:center;
+    background:rgb(var(--accent-rgb) / 0.2); color:var(--blue-light);
+  }
+  .kpi-ico svg{width:15px; height:15px;}
+  .kpi-ico.gold{background:rgba(201,169,97,0.2); color:var(--gold-light);}
+  .kpi-ico.green{background:rgba(61,220,151,0.18); color:var(--green);}
+  .kpi-lbl{font-size:0.79rem; color:rgba(255,255,255,0.6); font-weight:500; line-height:1.35;}
+  .kpi-val{font-family:'Rubik'; font-weight:900; font-size:1.5rem; color:var(--white); line-height:1.2; word-break:break-word;}
+  .kpi-val.accent{color:var(--blue-light);}
+  .kpi-val.gold{color:var(--gold-light);}
+  .kpi-val.green{color:var(--green);}
+  .kpi-val.warn{color:var(--red);}
+  .kpi-sub{margin-top:5px; font-size:0.76rem; color:rgba(255,255,255,0.45); line-height:1.5;}
+
+  /* ===== CHART ===== */
+  .chart-legend{display:flex; gap:18px; flex-wrap:wrap; margin-bottom:14px; font-size:0.78rem; color:rgba(255,255,255,0.62);}
+  .chart-legend span{display:flex; align-items:center; gap:7px;}
+  .chart-legend i{width:16px; height:3px; border-radius:2px; display:inline-block;}
+  #chart{width:100%; height:270px; display:block;}
+
+  /* ===== MILESTONES ===== */
+  .ms-list{display:flex; flex-direction:column; gap:2px;}
+  .ms{display:flex; align-items:center; gap:14px; padding:11px 4px; position:relative;}
+  .ms + .ms{border-top:1px solid rgba(255,255,255,0.07);}
+  .ms-dot{
+    width:34px; height:34px; border-radius:50%; flex-shrink:0;
+    display:flex; align-items:center; justify-content:center; font-size:0.95rem;
+    background:rgba(255,255,255,0.06); border:1.5px solid rgba(255,255,255,0.16);
+    transition:background .3s ease, border-color .3s ease;
+  }
+  .ms.done .ms-dot{background:rgb(var(--accent-rgb) / 0.3); border-color:rgb(var(--accent-light-rgb) / 0.7); box-shadow:0 0 14px rgb(var(--accent-rgb) / 0.45);}
+  .ms.final.done .ms-dot{background:rgba(201,169,97,0.3); border-color:rgba(228,205,148,0.8); box-shadow:0 0 16px rgba(201,169,97,0.5);}
+  .ms-txt{flex:1; min-width:0;}
+  .ms-txt b{display:block; color:var(--white); font-size:0.92rem; font-weight:600;}
+  .ms-txt small{display:block; font-size:0.76rem; color:rgba(255,255,255,0.45); margin-top:2px;}
+  .ms.done .ms-txt small{color:var(--blue-light);}
+  .ms-amt{font-family:'Rubik'; font-weight:700; font-size:0.88rem; color:rgba(255,255,255,0.7); white-space:nowrap;}
+
+  /* ===== BREAKDOWN ===== */
+  .bd-row{display:flex; align-items:baseline; justify-content:space-between; gap:14px; padding:11px 0; border-bottom:1px solid rgba(255,255,255,0.07); font-size:0.88rem;}
+  .bd-row:last-child{border-bottom:none;}
+  .bd-row .k{color:rgba(255,255,255,0.62);}
+  .bd-row .v{font-family:'Rubik'; font-weight:700; color:var(--white); white-space:nowrap;}
+  .bd-row .v.pos{color:var(--green);}
+  .bd-row .v.neg{color:var(--red);}
+  .bd-row.total{border-top:1px solid rgba(255,255,255,0.16); margin-top:6px; padding-top:14px;}
+  .bd-row.total .k{color:var(--white); font-weight:600;}
+  .bd-row.total .v{font-size:1.15rem; color:var(--blue-light);}
+  .formula{
+    display:block; margin-top:14px; padding:11px 14px; border-radius:12px;
+    background:rgba(0,0,0,0.24); font-size:0.79rem; color:rgba(255,255,255,0.6);
+    direction:ltr; text-align:left; unicode-bidi:isolate; line-height:1.7; word-break:break-word;
+  }
+
+  /* ===== HISTORY ===== */
+  .hist{display:flex; flex-direction:column; gap:2px; max-height:290px; overflow-y:auto;}
+  .hist-row{display:flex; align-items:center; gap:12px; padding:10px 2px;}
+  .hist-row + .hist-row{border-top:1px solid rgba(255,255,255,0.07);}
+  .hist-ico{
+    width:30px; height:30px; border-radius:9px; flex-shrink:0;
+    display:flex; align-items:center; justify-content:center;
+    background:rgba(61,220,151,0.16); color:var(--green); font-size:0.9rem; font-weight:800;
+  }
+  .hist-ico.neg{background:rgba(255,122,122,0.16); color:var(--red);}
+  .hist-main{flex:1; min-width:0;}
+  .hist-main b{display:block; font-family:'Rubik'; font-weight:700; font-size:0.92rem; color:var(--white);}
+  .hist-main small{display:block; font-size:0.75rem; color:rgba(255,255,255,0.45); margin-top:2px;}
+  .hist-del{
+    width:26px; height:26px; border-radius:8px; flex-shrink:0;
+    background:transparent; border:1px solid rgba(255,255,255,0.14); color:rgba(255,255,255,0.45);
+    display:flex; align-items:center; justify-content:center;
+    transition:background .2s ease, color .2s ease, border-color .2s ease;
+  }
+  .hist-del:hover{background:rgba(255,122,122,0.16); color:var(--red); border-color:rgba(255,122,122,0.4);}
+  .hist-del svg{width:12px; height:12px;}
+  .empty-inline{padding:26px 10px; text-align:center; color:rgba(255,255,255,0.42); font-size:0.87rem; line-height:1.7;}
+
+  /* ===== EMPTY / LOCKED STATE ===== */
+  .locked{
+    min-height:62vh; display:flex; align-items:center; justify-content:center; padding:60px 0;
+  }
+  .locked-card{
+    max-width:460px; width:100%; text-align:center;
+    background:linear-gradient(160deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03));
+    border:1px solid rgb(var(--accent-light-rgb) / 0.3);
+    border-radius:26px; padding:44px 32px;
+    box-shadow:0 36px 80px rgba(0,0,0,0.45);
+  }
+  .locked-ico{font-size:2.6rem; margin-bottom:16px;}
+  .locked-card h2{color:var(--white); font-size:1.3rem; line-height:1.4; margin-bottom:12px;}
+  .locked-card p{color:rgba(255,255,255,0.62); font-size:0.92rem; line-height:1.7; margin-bottom:26px;}
+  .locked-card .btn-primary{max-width:280px; margin:0 auto;}
+
+  footer{
+    border-top:1px solid var(--line); padding:26px 0 34px;
+    color:rgba(255,255,255,0.4); font-size:0.8rem; text-align:center;
+  }
+  footer a{color:var(--blue-light);}
+
+  /* ===== ACCESSIBILITY (mirrors the landing page's panel) ===== */
+  html.a11y-contrast{filter:contrast(1.35) saturate(1.15);}
+  html.a11y-grayscale{filter:grayscale(100%);}
+  html.a11y-contrast.a11y-grayscale{filter:grayscale(100%) contrast(1.35);}
+  html.a11y-underline a{text-decoration:underline !important;}
+  html.a11y-readable-font body, html.a11y-readable-font input, html.a11y-readable-font button{
+    font-family:Arial, Helvetica, sans-serif !important; letter-spacing:0.01em;
+  }
+  html.a11y-readable-font p{line-height:1.9 !important;}
+  html.a11y-stop-motion *{animation:none !important; transition:none !important;}
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width:1080px){
+    .row-main, .row-split{grid-template-columns:1fr;}
+    .row-kpi{grid-template-columns:repeat(2,1fr);}
+  }
+  @media (max-width:760px){
+    .container{padding:0 18px;}
+    .brand-sub{display:none;}
+    .user-mail{display:none;}
+    .user-chip{padding:5px !important;}
+    .back-btn span{display:none;}
+    .back-btn{padding:9px 12px;}
+    .page-head{padding:30px 0 4px;}
+    .card{padding:22px 18px;}
+    .goal-body{gap:20px; justify-content:center; text-align:center;}
+    .goal-facts{text-align:start;}
+    #chart{height:230px;}
+  }
+  @media (max-width:520px){
+    .row-kpi{grid-template-columns:1fr;}
+    .ring-wrap{width:148px; height:148px;}
+  }
+</style>
+</head>
+<body>
+
+<!-- one wrapper, so the single-file build can scope every query to this subtree -->
+<div id="dashboardPage">
+
+<header class="topbar">
+  <div class="container topbar-inner">
+    <a href="index.html" class="brand">
+      <span class="brand-mark">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17c4 0 5-9 8-9s4 5 6 5 3-3 4-4"/></svg>
+      </span>
+      SmartSaver AI
+      <span class="brand-sub" data-i18n="dash.title">לוח הבקרה</span>
+    </a>
+    <span class="topbar-spacer"></span>
+
+    <div class="user-chip" id="userChip" hidden>
+      <span class="user-avatar" id="userAvatar">?</span>
+      <span class="user-mail" id="userMail"></span>
+    </div>
+
+    <button class="icon-btn theme" id="themeBtn" type="button" aria-label="theme">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M9 18h6"/><path d="M10 21.5h4"/>
+        <path d="M12 2.5a6.5 6.5 0 0 0-3.8 11.8c.7.5 1.3 1.4 1.3 2.4v.3h5v-.3c0-1 .6-1.9 1.3-2.4A6.5 6.5 0 0 0 12 2.5z"/>
+      </svg>
+    </button>
+
+    <a href="index.html" class="back-btn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg>
+      <span data-i18n="dash.back">חזרה לאתר</span>
+    </a>
+  </div>
+</header>
+
+<!-- ===== NOT SIGNED IN ===== -->
+<section class="container locked" id="lockedView" hidden>
+  <div class="locked-card">
+    <div class="locked-ico">🔒</div>
+    <h2 data-i18n="dash.locked.title">לוח הבקרה נפתח אחרי שיוצרים יעד</h2>
+    <p data-i18n="dash.locked.desc">הצטרפו עם המייל שלכם בדף הבית — זה שומר את היעד וההתקדמות שלכם על המכשיר הזה, ולוקח כמה שניות.</p>
+    <a href="index.html#cta" class="btn-primary">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      <span data-i18n="dash.locked.cta">יצירת היעד הראשון</span>
+    </a>
+  </div>
+</section>
+
+<!-- ===== DASHBOARD ===== -->
+<main id="dashView" hidden>
+  <div class="container page-head">
+    <h1 id="greeting">—</h1>
+    <p data-i18n="dash.sub">כל מה שהיעד שלכם עושה, במקום אחד — לפי המספרים האמיתיים שהזנתם.</p>
+  </div>
+
+  <div class="container grid row-main">
+    <!-- goal -->
+    <section class="card">
+      <div class="card-head">
+        <div class="card-title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1"/></svg>
+          <span data-i18n="dash.goal.title">היעד שלכם</span>
+        </div>
+        <a href="index.html#simulator" class="card-note" style="text-decoration:underline;" data-i18n="dash.goal.edit">עריכה בסימולטור</a>
+      </div>
+      <div class="goal-body">
+        <div class="ring-wrap">
+          <svg class="ring" viewBox="0 0 160 160">
+            <defs>
+              <linearGradient id="ringGrad" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="rgb(var(--accent-light-rgb))"/>
+                <stop offset="100%" stop-color="rgb(var(--accent-rgb))"/>
+              </linearGradient>
+            </defs>
+            <circle class="ring-track" cx="80" cy="80" r="70"/>
+            <circle class="ring-fill" id="ringFill" cx="80" cy="80" r="70"/>
+          </svg>
+          <div class="ring-center">
+            <span class="ring-emoji" id="goalEmoji">🎯</span>
+            <span class="ring-pct" id="goalPct">0%</span>
+            <span class="ring-label" data-i18n="dash.goal.done">הושלם</span>
+          </div>
+        </div>
+        <div class="goal-facts">
+          <div class="goal-name" id="dashGoalName">—</div>
+          <div class="goal-money">
+            <span class="saved" id="goalSaved">—</span>
+            <span class="of" id="goalOf">—</span>
+          </div>
+          <div class="goal-remaining" id="goalRemaining">—</div>
+          <div class="goal-bar"><span id="goalBar"></span></div>
+          <div class="goal-tags" id="goalTags"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- deposit -->
+    <section class="card">
+      <div class="card-head">
+        <div class="card-title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+          <span data-i18n="dash.dep.title">הפקדה חדשה</span>
+        </div>
+      </div>
+      <div class="dep-amount">
+        <span class="cur" id="depCur">₪</span>
+        <input type="number" class="dep-input" id="depInput" min="0" step="1" placeholder="0" inputmode="decimal">
+      </div>
+      <div class="dep-quick" id="depQuick"></div>
+      <button class="btn-primary" id="depBtn" type="button" disabled>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+        <span data-i18n="dash.dep.cta">הוספה לחיסכון</span>
+      </button>
+      <div class="dep-flash" id="depFlash"></div>
+      <p class="dep-hint" data-i18n="dash.dep.hint">הסכום נוסף ל"כמה כבר חסכתם" ומתעדכן מיד בכל התחזיות ובסימולטור.</p>
+    </section>
+  </div>
+
+  <!-- KPIs -->
+  <div class="container grid row-kpi" style="padding-top:0;">
+    <div class="kpi">
+      <div class="kpi-top">
+        <span class="kpi-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M14 7h7v7"/></svg></span>
+        <span class="kpi-lbl" data-i18n="dash.kpi.weekly">חיסכון נטו לשבוע</span>
+      </div>
+      <div class="kpi-val" id="kpiWeekly">—</div>
+      <div class="kpi-sub" id="kpiWeeklySub">—</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-top">
+        <span class="kpi-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M8 3v4M16 3v4M3 11h18"/></svg></span>
+        <span class="kpi-lbl" data-i18n="dash.kpi.base">בקצב הנוכחי</span>
+      </div>
+      <div class="kpi-val" id="kpiBase">—</div>
+      <div class="kpi-sub" id="kpiBaseSub">—</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-top">
+        <span class="kpi-ico gold"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L4.5 13H11l-1 9 8.5-11H12l1-9z"/></svg></span>
+        <span class="kpi-lbl" data-i18n="dash.kpi.improved">עם הקיצוץ שסימנתם</span>
+      </div>
+      <div class="kpi-val gold" id="kpiImproved">—</div>
+      <div class="kpi-sub" id="kpiImprovedSub">—</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-top">
+        <span class="kpi-ico green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg></span>
+        <span class="kpi-lbl" data-i18n="dash.kpi.saveddays">ימים שחסכתם</span>
+      </div>
+      <div class="kpi-val green" id="kpiDays">—</div>
+      <div class="kpi-sub" id="kpiDaysSub">—</div>
+    </div>
+  </div>
+
+  <div class="container grid row-split" style="padding-top:0;">
+    <!-- chart -->
+    <section class="card">
+      <div class="card-head">
+        <div class="card-title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V4M4 20h16"/><path d="M7 16l4-5 3 3 5-7"/></svg>
+          <span data-i18n="dash.chart.title">תחזית החיסכון</span>
+        </div>
+      </div>
+      <div class="chart-legend">
+        <span><i style="background:rgba(255,255,255,0.42);"></i> <span data-i18n="dash.chart.base">קצב נוכחי</span></span>
+        <span><i style="background:#7FB0FF;"></i> <span data-i18n="dash.chart.improved">עם הקיצוץ</span></span>
+        <span><i style="background:#E4CD94;"></i> <span data-i18n="dash.chart.goal">עלות היעד</span></span>
+      </div>
+      <canvas id="chart" width="900" height="270"></canvas>
+    </section>
+
+    <!-- milestones -->
+    <section class="card">
+      <div class="card-head">
+        <div class="card-title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M5 21V4M5 4h11l-2 3.5L16 11H5"/></svg>
+          <span data-i18n="dash.ms.title">אבני דרך</span>
+        </div>
+      </div>
+      <div class="ms-list" id="msList"></div>
+    </section>
+  </div>
+
+  <div class="container grid row-split" style="padding-top:0;">
+    <!-- breakdown -->
+    <section class="card">
+      <div class="card-head">
+        <div class="card-title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="3"/><path d="M8 8h8M8 12h8M8 16h4"/></svg>
+          <span data-i18n="dash.bd.title">איך המספר מחושב</span>
+        </div>
+      </div>
+      <div id="bdRows"></div>
+      <span class="formula" id="bdFormula"></span>
+    </section>
+
+    <!-- history -->
+    <section class="card">
+      <div class="card-head">
+        <div class="card-title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+          <span data-i18n="dash.hist.title">היסטוריית הפקדות</span>
+        </div>
+        <span class="card-note" id="histTotal"></span>
+      </div>
+      <div class="hist" id="histList"></div>
+    </section>
+  </div>
+</main>
+
+<footer>
+  <div class="container">
+    © 2026 SmartSaver AI — <span data-i18n="dash.footer">כל הנתונים נשמרים על המכשיר הזה בלבד</span> · <a href="index.html" data-i18n="dash.back">חזרה לאתר</a>
+  </div>
+</footer>
+
+</div><!-- /#dashboardPage -->
+
+<script>
+/* =========================================================================
+   SmartSaver AI — Dashboard
+   Reads the very same localStorage record the landing page writes, so the two
+   pages are always looking at one truth. Nothing here leaves the device.
+   ========================================================================= */
+
+/* ---------- i18n (he / en / ar; every other language falls back to English) ---------- */
+const T = {
+  he: {
+    "dash.title":"לוח הבקרה",
+    "dash.back":"חזרה לאתר",
+    "dash.sub":"כל מה שהיעד שלכם עושה, במקום אחד — לפי המספרים האמיתיים שהזנתם.",
+    "dash.hello":"שלום, {name} 👋",
+    "dash.goal.title":"היעד שלכם",
+    "dash.goal.edit":"עריכה בסימולטור",
+    "dash.goal.done":"הושלם",
+    "dash.goal.of":"מתוך {total}",
+    "dash.goal.remaining":"נשארו לחסוך <b>{amount}</b>",
+    "dash.goal.reached":"היעד הושלם! אפשר לקנות 🎉",
+    "dash.dep.title":"הפקדה חדשה",
+    "dash.dep.cta":"הוספה לחיסכון",
+    "dash.dep.hint":"הסכום נוסף ל\"כמה כבר חסכתם\" ומתעדכן מיד בכל התחזיות ובסימולטור.",
+    "dash.dep.done":"נוספו {amount} לחיסכון ✓",
+    "dash.kpi.weekly":"חיסכון נטו לשבוע",
+    "dash.kpi.weekly.sub":"{allowance} דמי כיס + {extra} נוספות − {expenses} הוצאות",
+    "dash.kpi.weekly.warn":"ההוצאות גבוהות מההכנסות — כרגע לא נצבר חיסכון",
+    "dash.kpi.base":"בקצב הנוכחי",
+    "dash.kpi.improved":"עם הקיצוץ שסימנתם",
+    "dash.kpi.saveddays":"ימים שחסכתם",
+    "dash.kpi.days":"עוד {n} ימים",
+    "dash.kpi.never":"לא בקצב הזה",
+    "dash.kpi.nocut":"עדיין לא סימנתם קיצוץ",
+    "dash.kpi.cutof":"{amount} פחות הוצאות בשבוע",
+    "dash.kpi.reached":"כבר שם 🎉",
+    "dash.kpi.daysoff":"מוקדם יותר מהקצב הרגיל",
+    "dash.chart.title":"תחזית החיסכון",
+    "dash.chart.base":"קצב נוכחי",
+    "dash.chart.improved":"עם הקיצוץ",
+    "dash.chart.goal":"עלות היעד",
+    "dash.chart.today":"היום",
+    "dash.ms.title":"אבני דרך",
+    "dash.ms.reached":"הושג",
+    "dash.bd.title":"איך המספר מחושב",
+    "dash.bd.allowance":"דמי כיס שבועיים",
+    "dash.bd.extra":"הכנסה נוספת (חודשי ÷ {n})",
+    "dash.bd.expenses":"הוצאות שבועיות",
+    "dash.bd.cut":"קיצוץ שסימנתם",
+    "dash.bd.total":"סה\"כ נצבר בשבוע",
+    "dash.hist.title":"היסטוריית הפקדות",
+    "dash.hist.empty":"עוד לא רשמתם הפקדה.<br>כל סכום שתוסיפו יופיע כאן.",
+    "dash.hist.total":"סה\"כ {amount}",
+    "dash.hist.deposit":"הפקדה",
+    "dash.hist.undo":"ביטול הפקדה",
+    "dash.locked.title":"לוח הבקרה נפתח אחרי שיוצרים יעד",
+    "dash.locked.desc":"הצטרפו עם המייל שלכם בדף הבית — זה שומר את היעד וההתקדמות שלכם על המכשיר הזה, ולוקח כמה שניות.",
+    "dash.locked.cta":"יצירת היעד הראשון",
+    "dash.footer":"כל הנתונים נשמרים על המכשיר הזה בלבד"
+  },
+  en: {
+    "dash.title":"Dashboard",
+    "dash.back":"Back to site",
+    "dash.sub":"Everything your goal is doing, in one place — from the real numbers you entered.",
+    "dash.hello":"Hi, {name} 👋",
+    "dash.goal.title":"Your goal",
+    "dash.goal.edit":"Edit in simulator",
+    "dash.goal.done":"complete",
+    "dash.goal.of":"of {total}",
+    "dash.goal.remaining":"<b>{amount}</b> left to save",
+    "dash.goal.reached":"Goal reached — go get it 🎉",
+    "dash.dep.title":"New deposit",
+    "dash.dep.cta":"Add to savings",
+    "dash.dep.hint":"The amount is added to \"how much you've already saved\" and updates every forecast and the simulator instantly.",
+    "dash.dep.done":"Added {amount} to your savings ✓",
+    "dash.kpi.weekly":"Net savings per week",
+    "dash.kpi.weekly.sub":"{allowance} allowance + {extra} extra − {expenses} expenses",
+    "dash.kpi.weekly.warn":"Expenses exceed income — nothing is being saved right now",
+    "dash.kpi.base":"At your current pace",
+    "dash.kpi.improved":"With the cutback you set",
+    "dash.kpi.saveddays":"Days you saved",
+    "dash.kpi.days":"{n} days to go",
+    "dash.kpi.never":"Not at this pace",
+    "dash.kpi.nocut":"No cutback set yet",
+    "dash.kpi.cutof":"{amount} less spending per week",
+    "dash.kpi.reached":"Already there 🎉",
+    "dash.kpi.daysoff":"earlier than your normal pace",
+    "dash.chart.title":"Savings forecast",
+    "dash.chart.base":"Current pace",
+    "dash.chart.improved":"With the cutback",
+    "dash.chart.goal":"Goal cost",
+    "dash.chart.today":"Today",
+    "dash.ms.title":"Milestones",
+    "dash.ms.reached":"Reached",
+    "dash.bd.title":"How the number is built",
+    "dash.bd.allowance":"Weekly allowance",
+    "dash.bd.extra":"Extra income (monthly ÷ {n})",
+    "dash.bd.expenses":"Weekly expenses",
+    "dash.bd.cut":"Cutback you set",
+    "dash.bd.total":"Total saved per week",
+    "dash.hist.title":"Deposit history",
+    "dash.hist.empty":"No deposits logged yet.<br>Anything you add shows up here.",
+    "dash.hist.total":"{amount} total",
+    "dash.hist.deposit":"Deposit",
+    "dash.hist.undo":"Undo deposit",
+    "dash.locked.title":"The dashboard opens once you have a goal",
+    "dash.locked.desc":"Join with your email on the home page — it saves your goal and progress on this device, and takes a few seconds.",
+    "dash.locked.cta":"Create your first goal",
+    "dash.footer":"All data stays on this device only"
+  },
+  ar: {
+    "dash.title":"لوحة التحكم",
+    "dash.back":"العودة إلى الموقع",
+    "dash.sub":"كل ما يفعله هدفك في مكان واحد — من الأرقام الحقيقية التي أدخلتها.",
+    "dash.hello":"مرحبًا، {name} 👋",
+    "dash.goal.title":"هدفك",
+    "dash.goal.edit":"تعديل في المحاكاة",
+    "dash.goal.done":"مكتمل",
+    "dash.goal.of":"من {total}",
+    "dash.goal.remaining":"تبقّى توفير <b>{amount}</b>",
+    "dash.goal.reached":"تم تحقيق الهدف 🎉",
+    "dash.dep.title":"إيداع جديد",
+    "dash.dep.cta":"أضف إلى المدخرات",
+    "dash.dep.hint":"يُضاف المبلغ إلى «كم وفّرت حتى الآن» ويحدّث كل التوقعات والمحاكاة فورًا.",
+    "dash.dep.done":"تمت إضافة {amount} ✓",
+    "dash.kpi.weekly":"صافي التوفير أسبوعيًا",
+    "dash.kpi.weekly.sub":"{allowance} مصروف + {extra} إضافي − {expenses} مصاريف",
+    "dash.kpi.weekly.warn":"المصاريف أعلى من الدخل — لا يتم التوفير حاليًا",
+    "dash.kpi.base":"بمعدّلك الحالي",
+    "dash.kpi.improved":"مع التقليص الذي حدّدته",
+    "dash.kpi.saveddays":"أيام وفّرتها",
+    "dash.kpi.days":"بقي {n} يومًا",
+    "dash.kpi.never":"ليس بهذا المعدّل",
+    "dash.kpi.nocut":"لم تحدّد تقليصًا بعد",
+    "dash.kpi.cutof":"{amount} أقل إنفاقًا أسبوعيًا",
+    "dash.kpi.reached":"وصلت بالفعل 🎉",
+    "dash.kpi.daysoff":"أبكر من معدّلك المعتاد",
+    "dash.chart.title":"توقّع المدخرات",
+    "dash.chart.base":"المعدّل الحالي",
+    "dash.chart.improved":"مع التقليص",
+    "dash.chart.goal":"تكلفة الهدف",
+    "dash.chart.today":"اليوم",
+    "dash.ms.title":"محطات",
+    "dash.ms.reached":"تحققت",
+    "dash.bd.title":"كيف يُحتسب الرقم",
+    "dash.bd.allowance":"مصروف الجيب الأسبوعي",
+    "dash.bd.extra":"دخل إضافي (شهري ÷ {n})",
+    "dash.bd.expenses":"مصاريف أسبوعية",
+    "dash.bd.cut":"التقليص الذي حدّدته",
+    "dash.bd.total":"إجمالي التوفير الأسبوعي",
+    "dash.hist.title":"سجل الإيداعات",
+    "dash.hist.empty":"لا إيداعات بعد.<br>كل ما تضيفه سيظهر هنا.",
+    "dash.hist.total":"الإجمالي {amount}",
+    "dash.hist.deposit":"إيداع",
+    "dash.hist.undo":"تراجع",
+    "dash.locked.title":"تُفتح لوحة التحكم بعد إنشاء هدف",
+    "dash.locked.desc":"انضم ببريدك الإلكتروني في الصفحة الرئيسية — يحفظ هدفك وتقدّمك على هذا الجهاز، ولا يستغرق سوى ثوانٍ.",
+    "dash.locked.cta":"إنشاء الهدف الأول",
+    "dash.footer":"تبقى كل البيانات على هذا الجهاز فقط"
+  }
+};
+
+const RTL = { he:1, ar:1, fa:1, ur:1 };
+const CURRENCY = {
+  he:'₪', en:'$', ar:'$', ru:'₽', fr:'€', es:'€', de:'€', pt:'€',
+  zh:'¥', hi:'₹', it:'€', tr:'₺', ja:'¥', ko:'₩', nl:'€', sv:'SEK',
+  pl:'PLN', uk:'₴', el:'€', ro:'RON', hu:'HUF', cs:'CZK', fi:'€',
+  da:'DKK', no:'NOK', id:'Rp', ms:'RM', th:'฿', vi:'₫', fa:'﷼',
+  ur:'₨', bn:'৳', pa:'₹', ta:'₹', te:'₹', sw:'KES', am:'ETB',
+  bg:'BGN', sr:'RSD', hr:'€'
+};
+
+const MONTH_WEEKS = 4.345;
+const QUICK_STEPS = [10, 20, 50, 100];
+const MILESTONES = [25, 50, 75, 100];
+
+/* the language actually shown in the dashboard: the site's choice if we translated it,
+   otherwise English — mixing a half-translated UI would read worse than clean English. */
+let siteLang = 'en';
+try { siteLang = localStorage.getItem('smartsaver_lang') || 'en'; } catch(e){}
+const uiLang = T[siteLang] ? siteLang : 'en';
+
+function t(key, vars){
+  let s = (T[uiLang] && T[uiLang][key] !== undefined) ? T[uiLang][key] : (T.en[key] !== undefined ? T.en[key] : key);
+  if(vars) Object.keys(vars).forEach(k => { s = s.split('{' + k + '}').join(vars[k]); });
+  return s;
+}
+
+/* look inside the dashboard's own subtree first — in the single-file build the landing
+   page shares this DOM, so an unscoped getElementById could reach the wrong element */
+const dashRoot = document.getElementById('dashboardPage');
+const $ = (id) => (dashRoot && dashRoot.querySelector('#' + id)) || document.getElementById(id);
+const cur = () => CURRENCY[siteLang] || CURRENCY.en;
+
+function money(n){
+  if(!isFinite(n)) return '—';
+  return cur() + Math.round(n).toLocaleString(undefined, { maximumFractionDigits: 0 });
+}
+function num(n){
+  if(!isFinite(n)) return '—';
+  return Math.round(n).toLocaleString(undefined, { maximumFractionDigits: 0 });
+}
+function pctOf(a, b){
+  if(!isFinite(a) || !isFinite(b) || b <= 0) return 0;
+  return Math.min(Math.max((a / b) * 100, 0), 100);
+}
+function addDays(date, days){
+  const d = new Date(date);
+  d.setDate(d.getDate() + Math.round(days));
+  return d;
+}
+function fmtDate(d){
+  try {
+    return new Intl.DateTimeFormat(uiLang === 'he' ? 'he-IL' : uiLang, {
+      day: 'numeric', month: 'long',
+      year: d.getFullYear() !== new Date().getFullYear() ? 'numeric' : undefined
+    }).format(d);
+  } catch(e){ return d.toLocaleDateString(); }
+}
+function fmtDateShort(d){
+  try { return new Intl.DateTimeFormat(uiLang === 'he' ? 'he-IL' : uiLang, { day:'numeric', month:'short' }).format(d); }
+  catch(e){ return d.toLocaleDateString(); }
+}
+
+/* ---------- goal → emoji, mirroring the landing page ---------- */
+const GOAL_EMOJI = [
+  [['bike','bicycle','אופניים','bicicleta','vélo','fahrrad','велосипед','自転車','자전거','单车','xe đạp','دراجة'], '🚲'],
+  [['console','ps5','ps4','playstation','xbox','switch','nintendo','קונסולה','משחק','جهاز ألعاب'], '🎮'],
+  [['phone','iphone','samsung','mobile','smartphone','טלפון','פלאפון','celular','téléphone','handy','телефон','手机','هاتف'], '📱'],
+  [['laptop','computer','pc','notebook','מחשב','ordinateur','компьютер','حاسوب'], '💻'],
+  [['headphone','earphone','airpods','אוזניות','écouteurs','kopfhörer','наушники','سماعات'], '🎧'],
+  [['trip','vacation','travel','holiday','journey','טיול','חופש','נסיעה','viaje','voyage','reise','путешествие','رحلة'], '✈️'],
+  [['watch','שעון','reloj','montre','uhr','часы','ساعة'], '⌚'],
+  [['camera','מצלמה','cámara','kamera','камера','كاميرا'], '📷'],
+  [['guitar','גיטרה','guitarra','gitarre','гитара','جيتار'], '🎸'],
+  [['skateboard','סקייטבורד','קורקינט'], '🛹'],
+  [['drone','רחפן','дрон','طائرة'], '🛸'],
+  [['shoe','sneaker','נעל','נעליים','zapatillas','кроссовки','حذاء'], '👟'],
+  [['car','רכב','מכונית','coche','voiture','auto','машина','سيارة'], '🚗'],
+  [['tablet','ipad','טאבלט'], '📱'],
+  [['piano','פסנתר','пианино','بيانو'], '🎹']
+];
+function goalEmoji(name){
+  const n = (name || '').toLowerCase();
+  if(!n.trim()) return '🎯';
+  for(const [words, emoji] of GOAL_EMOJI){
+    if(words.some(w => n.includes(w))) return emoji;
+  }
+  return '🎯';
+}
+
+/* ---------- shared preferences, restored exactly as the landing page left them ---------- */
+/* in the single-file build the landing page owns <html> and the title — touching them
+   from here would relabel its whole UI, so only the standalone page may. */
+const EMBEDDED = !!window.__ssSingleFile;
+
+function restorePrefs(){
+  if(dashRoot) dashRoot.setAttribute('dir', RTL[uiLang] ? 'rtl' : 'ltr');
+  if(!EMBEDDED){
+    document.documentElement.lang = uiLang;
+    document.documentElement.dir = RTL[uiLang] ? 'rtl' : 'ltr';
+  }
+
+  try {
+    const accent = localStorage.getItem('smartsaver_accent_rgb');
+    const light = localStorage.getItem('smartsaver_accent_light_rgb');
+    if(accent) document.documentElement.style.setProperty('--accent-rgb', accent);
+    if(light) document.documentElement.style.setProperty('--accent-light-rgb', light);
+
+    if(localStorage.getItem('smartsaver_theme') === 'dark') document.documentElement.classList.add('theme-dark');
+
+    const pct = parseInt(localStorage.getItem('smartsaver_a11y_textpct'), 10);
+    if(isFinite(pct)) document.documentElement.style.fontSize = pct + '%';
+    ['contrast','grayscale','underline','readable-font','stop-motion'].forEach(name => {
+      if(localStorage.getItem('smartsaver_a11y_' + name) === '1') document.documentElement.classList.add('a11y-' + name);
+    });
+  } catch(e){}
+
+  // scoped: an unscoped query would relabel the landing page's own [data-i18n] nodes
+  // with raw key names, since this file only carries the dash.* dictionary
+  (dashRoot || document).querySelectorAll('[data-i18n]').forEach(el => {
+    el.innerHTML = t(el.getAttribute('data-i18n'));
+  });
+  if(!EMBEDDED) document.title = 'SmartSaver AI — ' + t('dash.title');
+}
+
+/* ---------- the user record ---------- */
+function userKey(email){ return 'smartsaver_user:' + email.toLowerCase(); }
+
+let email = null, record = {};
+
+function loadRecord(){
+  try { email = localStorage.getItem('smartsaver_current_user'); } catch(e){ email = null; }
+  if(!email) return false;
+  try { record = JSON.parse(localStorage.getItem(userKey(email))) || {}; } catch(e){ record = {}; }
+  return true;
+}
+function saveRecord(){
+  if(!email) return;
+  record.savedAt = Date.now();
+  try { localStorage.setItem(userKey(email), JSON.stringify(record)); } catch(e){}
+}
+
+/* every field the landing page stores is a string — read it back as a safe number */
+function n(field, fallback){
+  const v = parseFloat(record[field]);
+  return isFinite(v) && v >= 0 ? v : (fallback || 0);
+}
+
+function model(){
+  const goalCost = Math.max(n('goalCost', 0), 1);
+  const saved = n('alreadySaved', 0);
+  const allowance = n('weeklyAllowance', 0);
+  const monthlyExtra = n('monthlyExtra', 0);
+  const expenses = n('weeklyExpenses', 0);
+  const extraWeekly = monthlyExtra / MONTH_WEEKS;
+  const baseWeekly = allowance + extraWeekly - expenses;
+  // the landing page bounds the cutback slider to weekly expenses — mirror that, never double-count
+  const cut = Math.min(Math.max(parseFloat(record.cutbackValue) || 0, 0), expenses);
+  const improvedWeekly = baseWeekly + cut;
+  const remaining = Math.max(goalCost - saved, 0);
+  const baseDays = remaining === 0 ? 0 : (baseWeekly > 0 ? (remaining / baseWeekly) * 7 : Infinity);
+  const improvedDays = remaining === 0 ? 0 : (improvedWeekly > 0 ? (remaining / improvedWeekly) * 7 : Infinity);
+  return {
+    name: (record.goalName || '').trim(),
+    goalCost, saved, allowance, monthlyExtra, extraWeekly, expenses,
+    cut, baseWeekly, improvedWeekly, remaining, baseDays, improvedDays,
+    pct: pctOf(saved, goalCost)
+  };
+}
+
+/* ---------- rendering ---------- */
+function renderGoal(m){
+  $('goalEmoji').textContent = goalEmoji(m.name);
+  // not plain "goalName": the landing page owns that id for its simulator input,
+  // and the single-file build puts both documents in one DOM
+  $('dashGoalName').textContent = m.name || t('dash.goal.title');
+  $('goalSaved').textContent = money(m.saved);
+  $('goalOf').textContent = t('dash.goal.of', { total: money(m.goalCost) });
+  $('goalPct').textContent = Math.round(m.pct) + '%';
+  $('ringFill').style.strokeDashoffset = String(439.8 * (1 - m.pct / 100));
+  $('ringFill').style.stroke = m.pct >= 100 ? 'var(--gold-light)' : 'url(#ringGrad)';
+  $('goalBar').style.width = m.pct + '%';
+  $('goalRemaining').innerHTML = m.remaining <= 0
+    ? t('dash.goal.reached')
+    : t('dash.goal.remaining', { amount: money(m.remaining) });
+
+  const tags = [];
+  if(m.remaining <= 0){
+    tags.push('<span class="tag gold">🏆 ' + t('dash.kpi.reached') + '</span>');
+  } else if(isFinite(m.improvedDays)){
+    tags.push('<span class="tag good">🗓 ' + fmtDate(addDays(new Date(), m.improvedDays)) + '</span>');
+    tags.push('<span class="tag">' + t('dash.kpi.days', { n: num(m.improvedDays) }) + '</span>');
+  } else {
+    tags.push('<span class="tag bad">' + t('dash.kpi.never') + '</span>');
+  }
+  if(m.cut > 0) tags.push('<span class="tag gold">✂️ ' + t('dash.kpi.cutof', { amount: money(m.cut) }) + '</span>');
+  $('goalTags').innerHTML = tags.join('');
+}
+
+function renderKpis(m){
+  const weeklyEl = $('kpiWeekly');
+  weeklyEl.textContent = money(m.baseWeekly);
+  weeklyEl.className = 'kpi-val ' + (m.baseWeekly > 0 ? 'accent' : 'warn');
+  $('kpiWeeklySub').textContent = m.baseWeekly > 0
+    ? t('dash.kpi.weekly.sub', { allowance: money(m.allowance), extra: money(m.extraWeekly), expenses: money(m.expenses) })
+    : t('dash.kpi.weekly.warn');
+
+  if(m.remaining <= 0){
+    $('kpiBase').textContent = t('dash.kpi.reached');
+    $('kpiBaseSub').textContent = '';
+  } else if(isFinite(m.baseDays)){
+    $('kpiBase').textContent = fmtDate(addDays(new Date(), m.baseDays));
+    $('kpiBaseSub').textContent = t('dash.kpi.days', { n: num(m.baseDays) });
+  } else {
+    $('kpiBase').textContent = t('dash.kpi.never');
+    $('kpiBaseSub').textContent = t('dash.kpi.weekly.warn');
+  }
+
+  if(m.remaining <= 0){
+    $('kpiImproved').textContent = t('dash.kpi.reached');
+    $('kpiImprovedSub').textContent = '';
+  } else if(m.cut <= 0){
+    $('kpiImproved').textContent = '—';
+    $('kpiImprovedSub').textContent = t('dash.kpi.nocut');
+  } else if(isFinite(m.improvedDays)){
+    $('kpiImproved').textContent = fmtDate(addDays(new Date(), m.improvedDays));
+    $('kpiImprovedSub').textContent = t('dash.kpi.cutof', { amount: money(m.cut) });
+  } else {
+    $('kpiImproved').textContent = t('dash.kpi.never');
+    $('kpiImprovedSub').textContent = '';
+  }
+
+  const daysSaved = (isFinite(m.baseDays) && isFinite(m.improvedDays)) ? Math.max(Math.round(m.baseDays - m.improvedDays), 0) : 0;
+  $('kpiDays').textContent = daysSaved > 0 ? num(daysSaved) : '0';
+  $('kpiDaysSub').textContent = daysSaved > 0 ? t('dash.kpi.daysoff') : t('dash.kpi.nocut');
+}
+
+function renderMilestones(m){
+  const list = $('msList');
+  list.innerHTML = MILESTONES.map(step => {
+    const amount = m.goalCost * step / 100;
+    const done = m.saved >= amount - 0.001;
+    let when = '';
+    if(done){
+      when = t('dash.ms.reached');
+    } else if(m.improvedWeekly > 0){
+      const days = ((amount - m.saved) / m.improvedWeekly) * 7;
+      when = fmtDate(addDays(new Date(), days));
+    } else {
+      when = t('dash.kpi.never');
+    }
+    const icon = step === 100 ? '🏆' : (done ? '✓' : step + '%');
+    return '<div class="ms' + (done ? ' done' : '') + (step === 100 ? ' final' : '') + '">' +
+             '<span class="ms-dot">' + icon + '</span>' +
+             '<span class="ms-txt"><b>' + step + '%</b><small>' + when + '</small></span>' +
+             '<span class="ms-amt">' + money(amount) + '</span>' +
+           '</div>';
+  }).join('');
+}
+
+function renderBreakdown(m){
+  const rows = [
+    { k: t('dash.bd.allowance'), v: '+' + money(m.allowance), cls: 'pos' },
+    { k: t('dash.bd.extra', { n: MONTH_WEEKS }), v: '+' + money(m.extraWeekly), cls: 'pos' },
+    { k: t('dash.bd.expenses'), v: '−' + money(m.expenses), cls: 'neg' }
+  ];
+  if(m.cut > 0) rows.push({ k: t('dash.bd.cut'), v: '+' + money(m.cut), cls: 'pos' });
+  let html = rows.map(r => '<div class="bd-row"><span class="k">' + r.k + '</span><span class="v ' + r.cls + '">' + r.v + '</span></div>').join('');
+  html += '<div class="bd-row total"><span class="k">' + t('dash.bd.total') + '</span><span class="v">' + money(m.improvedWeekly) + '</span></div>';
+  $('bdRows').innerHTML = html;
+
+  const days = isFinite(m.improvedDays) ? num(m.improvedDays) : '∞';
+  $('bdFormula').textContent =
+    '(' + money(m.goalCost) + ' − ' + money(m.saved) + ') ÷ (' + money(m.improvedWeekly) + ' ÷ 7) = ' + days + ' days';
+}
+
+function renderHistory(){
+  const list = $('histList');
+  const deps = Array.isArray(record.deposits) ? record.deposits : [];
+  if(!deps.length){
+    list.innerHTML = '<div class="empty-inline">' + t('dash.hist.empty') + '</div>';
+    $('histTotal').textContent = '';
+    return;
+  }
+  const total = deps.reduce((s, d) => s + (parseFloat(d.amount) || 0), 0);
+  $('histTotal').textContent = t('dash.hist.total', { amount: money(total) });
+  list.innerHTML = deps.slice().reverse().map(d => {
+    const when = new Date(d.ts);
+    return '<div class="hist-row">' +
+             '<span class="hist-ico">+</span>' +
+             '<span class="hist-main"><b>' + money(d.amount) + '</b><small>' + fmtDateShort(when) + ' · ' + t('dash.hist.deposit') + '</small></span>' +
+             '<button class="hist-del" type="button" data-ts="' + d.ts + '" title="' + t('dash.hist.undo') + '" aria-label="' + t('dash.hist.undo') + '">' +
+               '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 5l14 14M19 5L5 19"/></svg>' +
+             '</button>' +
+           '</div>';
+  }).join('');
+
+  list.querySelectorAll('.hist-del').forEach(btn => {
+    btn.addEventListener('click', () => removeDeposit(parseInt(btn.dataset.ts, 10)));
+  });
+}
+
+/* ---------- chart ---------- */
+function drawChart(m){
+  const canvas = $('chart');
+  const ctx = canvas.getContext('2d');
+  const dpr = window.devicePixelRatio || 1;
+  const rect = canvas.getBoundingClientRect();
+  const W = rect.width || 900;
+  const H = rect.height || 270;
+  canvas.width = W * dpr; canvas.height = H * dpr;
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  ctx.clearRect(0, 0, W, H);
+
+  const padL = 12, padR = 12, padT = 18, padB = 30;
+  const plotW = W - padL - padR, plotH = H - padT - padB;
+
+  const baseDays = isFinite(m.baseDays) ? m.baseDays : 0;
+  const improvedDays = isFinite(m.improvedDays) ? m.improvedDays : 0;
+  const maxDays = Math.max(baseDays, improvedDays, 7);
+  const maxY = Math.max(m.goalCost * 1.1, m.saved * 1.1, 1);
+
+  const xOf = (d) => padL + (d / maxDays) * plotW;
+  const yOf = (v) => padT + plotH - (v / maxY) * plotH;
+
+  // faint horizontal guides
+  ctx.strokeStyle = 'rgba(255,255,255,0.055)';
+  ctx.lineWidth = 1;
+  for(let i = 0; i <= 4; i++){
+    const y = padT + (plotH * i) / 4;
+    ctx.beginPath(); ctx.moveTo(padL, y); ctx.lineTo(W - padR, y); ctx.stroke();
+  }
+
+  // goal line
+  ctx.strokeStyle = 'rgba(228,205,148,0.85)';
+  ctx.setLineDash([6, 6]); ctx.lineWidth = 1.6;
+  ctx.beginPath(); ctx.moveTo(padL, yOf(m.goalCost)); ctx.lineTo(W - padR, yOf(m.goalCost)); ctx.stroke();
+  ctx.setLineDash([]);
+
+  function line(weeklyRate, daysToGoal, color, width, fill){
+    if(weeklyRate <= 0 && m.remaining > 0) return;
+    const daily = weeklyRate / 7;
+    const stop = daysToGoal > 0 ? daysToGoal : maxDays;
+    const pts = [];
+    const steps = 60;
+    for(let i = 0; i <= steps; i++){
+      const d = (maxDays * i) / steps;
+      const capped = Math.min(d, stop);
+      const val = Math.min(m.saved + daily * capped, m.goalCost);
+      pts.push([xOf(d), yOf(val)]);
+    }
+    if(fill){
+      const grad = ctx.createLinearGradient(0, padT, 0, padT + plotH);
+      grad.addColorStop(0, 'rgba(127,176,255,0.22)');
+      grad.addColorStop(1, 'rgba(127,176,255,0)');
+      ctx.fillStyle = grad;
+      ctx.beginPath();
+      ctx.moveTo(pts[0][0], padT + plotH);
+      pts.forEach(p => ctx.lineTo(p[0], p[1]));
+      ctx.lineTo(pts[pts.length - 1][0], padT + plotH);
+      ctx.closePath(); ctx.fill();
+    }
+    ctx.strokeStyle = color; ctx.lineWidth = width; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+    ctx.beginPath();
+    pts.forEach((p, i) => i === 0 ? ctx.moveTo(p[0], p[1]) : ctx.lineTo(p[0], p[1]));
+    ctx.stroke();
+  }
+
+  line(m.baseWeekly, baseDays, 'rgba(255,255,255,0.42)', 2.5, false);
+  line(m.improvedWeekly, improvedDays, '#7FB0FF', 3.2, true);
+
+  // arrival marker
+  if(m.remaining > 0 && isFinite(m.improvedDays) && m.improvedWeekly > 0){
+    const x = xOf(improvedDays), y = yOf(m.goalCost);
+    ctx.fillStyle = '#E4CD94';
+    ctx.beginPath(); ctx.arc(x, y, 5.5, 0, Math.PI * 2); ctx.fill();
+    ctx.strokeStyle = 'rgba(228,205,148,0.35)'; ctx.lineWidth = 6;
+    ctx.beginPath(); ctx.arc(x, y, 5.5, 0, Math.PI * 2); ctx.stroke();
+  }
+
+  // starting dot
+  ctx.fillStyle = '#7FB0FF';
+  ctx.beginPath(); ctx.arc(xOf(0), yOf(m.saved), 4.5, 0, Math.PI * 2); ctx.fill();
+
+  // axis labels — 'start'/'end' follow the page direction and clipped the text off-canvas in RTL,
+  // so anchor them to the physical edges instead
+  ctx.fillStyle = 'rgba(255,255,255,0.42)';
+  ctx.font = '11px Heebo, sans-serif';
+  ctx.textAlign = 'left';
+  ctx.fillText(t('dash.chart.today'), padL, H - 10);
+  if(m.remaining > 0 && isFinite(m.improvedDays) && m.improvedWeekly > 0){
+    ctx.textAlign = 'right';
+    ctx.fillText(fmtDateShort(addDays(new Date(), maxDays)), W - padR, H - 10);
+  }
+  ctx.textAlign = 'left';
+  ctx.fillStyle = 'rgba(228,205,148,0.8)';
+  ctx.fillText(money(m.goalCost), padL + 2, Math.max(yOf(m.goalCost) - 8, 13));
+}
+
+/* ---------- deposits ---------- */
+function addDeposit(amount){
+  amount = Math.round((parseFloat(amount) || 0) * 100) / 100;
+  if(!(amount > 0)) return;
+  record.alreadySaved = String(n('alreadySaved', 0) + amount);
+  if(!Array.isArray(record.deposits)) record.deposits = [];
+  record.deposits.push({ ts: Date.now(), amount: amount });
+  saveRecord();
+  render();
+  flash(t('dash.dep.done', { amount: money(amount) }));
+}
+function removeDeposit(ts){
+  if(!Array.isArray(record.deposits)) return;
+  const idx = record.deposits.findIndex(d => d.ts === ts);
+  if(idx === -1) return;
+  const amount = parseFloat(record.deposits[idx].amount) || 0;
+  record.deposits.splice(idx, 1);
+  record.alreadySaved = String(Math.max(n('alreadySaved', 0) - amount, 0));
+  saveRecord();
+  render();
+}
+let flashTimer = 0;
+function flash(msg){
+  const el = $('depFlash');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(flashTimer);
+  flashTimer = setTimeout(() => el.classList.remove('show'), 2600);
+}
+
+/* ---------- wiring ---------- */
+function render(){
+  const m = model();
+  renderGoal(m);
+  renderKpis(m);
+  renderMilestones(m);
+  renderBreakdown(m);
+  renderHistory();
+  drawChart(m);
+}
+
+function boot(){
+  restorePrefs();
+
+  if(!loadRecord() || record.goalCost === undefined){
+    $('lockedView').hidden = false;
+    return;
+  }
+
+  $('dashView').hidden = false;
+  $('userChip').hidden = false;
+  $('userAvatar').textContent = (email.trim().charAt(0) || '?').toUpperCase();
+  $('userMail').textContent = email;
+  $('greeting').textContent = t('dash.hello', { name: email.split('@')[0] });
+  $('depCur').textContent = cur();
+
+  // quick amounts scale with the goal, so they stay meaningful for a ₪50 goal and a ₪5,000 one
+  const goalCost = Math.max(n('goalCost', 0), 1);
+  const unit = goalCost >= 4000 ? 10 : (goalCost >= 800 ? 5 : 1);
+  const steps = QUICK_STEPS.map(s => Math.max(Math.round((s * unit) / 5), 1));
+  $('depQuick').innerHTML = steps.map(s => '<button type="button" data-add="' + s + '">+' + money(s) + '</button>').join('');
+  $('depQuick').querySelectorAll('button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const input = $('depInput');
+      input.value = String((parseFloat(input.value) || 0) + parseFloat(btn.dataset.add));
+      syncDepBtn();
+      input.focus();
+    });
+  });
+
+  $('depInput').addEventListener('input', syncDepBtn);
+  $('depInput').addEventListener('keydown', (e) => { if(e.key === 'Enter') submitDeposit(); });
+  $('depBtn').addEventListener('click', submitDeposit);
+
+  $('themeBtn').addEventListener('click', () => {
+    const dark = !document.documentElement.classList.contains('theme-dark');
+    document.documentElement.classList.toggle('theme-dark', dark);
+    try { localStorage.setItem('smartsaver_theme', dark ? 'dark' : 'light'); } catch(e){}
+    record.theme = dark ? 'dark' : 'light';
+    saveRecord();
+  });
+
+  render();
+  window.addEventListener('resize', () => drawChart(model()));
+  // if the landing page is open in another tab, keep both views on the same truth
+  window.addEventListener('storage', (e) => {
+    if(!e.key || e.key === userKey(email)){
+      if(loadRecord()) render();
+    }
+  });
+}
+
+function syncDepBtn(){
+  const v = parseFloat($('depInput').value);
+  $('depBtn').disabled = !(isFinite(v) && v > 0);
+}
+function submitDeposit(){
+  const input = $('depInput');
+  const v = parseFloat(input.value);
+  if(!(isFinite(v) && v > 0)) return;
+  addDeposit(v);
+  input.value = '';
+  syncDepBtn();
+}
+
+boot();
+</script>
+</body>
+</html>

@@ -1,0 +1,27 @@
+{
+  "name": "SmartSaver AI — החיסכון שלך, על מסלול",
+  "short_name": "SmartSaver",
+  "description": "סימולטור חיסכון ולוח בקרה לילדים ולנוער. מגדירים יעד, רואים בדיוק כמה נשאר, ומפקידים כל שבוע.",
+  "lang": "he",
+  "dir": "rtl",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#071A3B",
+  "theme_color": "#071A3B",
+  "categories": ["finance", "education"],
+  "icons": [
+    { "src": "./icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "./icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "./icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    {
+      "name": "לוח הבקרה",
+      "short_name": "לוח בקרה",
+      "url": "./dashboard.html",
+      "icons": [{ "src": "./icon-192.png", "sizes": "192x192" }]
+    }
+  ]
+}
