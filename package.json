@@ -1,0 +1,15 @@
+{
+  "name": "courtmaster-ai",
+  "version": "3.0.0",
+  "description": "CourtMaster AI: אקדמיית כדורסל אישית עם תוכנית שבועית, אימון חי, מסלול למידה, מבחנים ומאמן AI",
+  "private": true,
+  "scripts": {
+    "start": "node server.js --open",
+    "serve": "node server.js",
+    "build": "node build-site.js",
+    "deploy": "node build-site.js && git -C dist add -A && git -C dist commit -m \"Update site\" && git -C dist push"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.133.0"
+  }
+}
